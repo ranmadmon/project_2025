@@ -5,16 +5,20 @@
 
 <hibernate-mapping>
 
-
-
-    <class name="com.ashcollege.entities.User" table="users1" lazy="false">
+    <class name="com.ashcollege.entities.CityEntity" table="cities" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
+        <property name="name" type="string" column="name"/>
+    </class>
 
-<!--        <many-to-one name="?" column="?"-->
-<!--                     class="com.ashcollege.entities.?"/>-->
-
+    <class name="com.ashcollege.entities.StreetEntity" table="streets" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+                <many-to-one name="cityEntity" column="city_id"
+                             class="com.ashcollege.entities.CityEntity"/>
     </class>
 
 

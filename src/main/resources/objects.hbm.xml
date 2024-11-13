@@ -5,6 +5,12 @@
 
 <hibernate-mapping>
 
+    <class name="com.ashcollege.entities.RoleEntity" table="roles" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
     <class name="com.ashcollege.entities.UserEntity" table="users" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>

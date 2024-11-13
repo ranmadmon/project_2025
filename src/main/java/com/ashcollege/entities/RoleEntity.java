@@ -1,6 +1,6 @@
 package com.ashcollege.entities;
 
-public class CityEntity extends BaseEntity {
+public class RoleEntity extends BaseEntity{
     private String name;
 
     public String getName() {

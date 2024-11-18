@@ -22,6 +22,7 @@ public class Main {
         LOGGER.info("Application started.");
         applicationStarted = true;
         startTime = System.currentTimeMillis();
+        System.out.println("hello");
 
     }
 

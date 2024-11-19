@@ -22,6 +22,20 @@
         <property name="email" type="string" column="email"/>
     </class>
 
+    <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+
+    <class name="com.ashcollege.entities.LecturerEntity" table="lecturers" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+
 
 
 

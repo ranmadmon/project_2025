@@ -9,7 +9,15 @@ public class MaterialEntity extends BaseEntity {
     private Date uploadDate;
     private CourseEntity courseEntity;
     private String description;
+    private TagEntity tagEntity;
 
+    public TagEntity getTagEntity() {
+        return tagEntity;
+    }
+
+    public void setTagEntity(TagEntity tagEntity) {
+        this.tagEntity = tagEntity;
+    }
 
     public String getTitle() {
         return title;

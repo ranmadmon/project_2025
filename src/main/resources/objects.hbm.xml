@@ -47,7 +47,7 @@
                      class="com.ashcollege.entities.LecturerEntity"/>
     </class>
 
-    <class name="com.ashcollege.entities.TypeEntity" table="courses" lazy="false">
+    <class name="com.ashcollege.entities.TypeEntity" table="types" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>

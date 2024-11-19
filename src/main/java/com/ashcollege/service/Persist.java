@@ -55,7 +55,7 @@ public class Persist {
         return this.sessionFactory.getCurrentSession()
                 .createQuery("FROM " + clazz.getSimpleName()).list();
     }
-
+//
 //    public List<MaterialEntity> getMaterialByTitle(String title){
 //        return this.sessionFactory.getCurrentSession()
 //                .createQuery("FROM MaterialEntity WHERE MaterialEntity.title = :title")

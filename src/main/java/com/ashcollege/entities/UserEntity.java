@@ -23,12 +23,13 @@ public class UserEntity extends BaseEntity {
     private String lastName;
     private String email;
 
-    public UserEntity(String username, String password, String firstName, String lastName, String email) {
+    public UserEntity(String username, String password, String firstName, String lastName, String email,String role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.role = new RoleEntity(role);
     }
 
 

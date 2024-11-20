@@ -2,6 +2,7 @@ package com.ashcollege.controllers;
 
 import com.ashcollege.entities.UserEntity;
 import com.ashcollege.responses.LoginResponse;
+import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,23 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
-        UserEntity ram = new UserEntity("ramr", "1234", "ram", "revivo", "ram@");
-        persist.save(ram);
+
 
         System.out.println(persist.getMaterialByTitle("loop"));
 
     }
-//    @RequestMapping("/register")
-//    public RegisterResponse register(String userName, String password, String name,String lastName,
-//                                     String email,String role){
-//
-//    }er
+    @RequestMapping("/register")
+    public RegisterResponse register(String userName, String password, String name, String lastName,
+                                     String email, String role){
+        boolean isExist = false;
+        if (isUsernameExists(userName)){
+            isExist = true;
+        }else{
+          UserEntity user = new UserEntity(userName,password,name,lastName,email,role);
+          this.persist.save(user);
+        }
+         return new RegisterResponse(true,200,isExist);
+    }
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {

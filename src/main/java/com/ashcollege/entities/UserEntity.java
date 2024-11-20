@@ -1,7 +1,10 @@
 package com.ashcollege.entities;
 
+import org.apache.catalina.User;
+
 public class UserEntity extends BaseEntity {
     private String username;
+    private RoleEntity role;
 
     public UserEntity () {
 
@@ -29,7 +32,13 @@ public class UserEntity extends BaseEntity {
     }
 
 
+    public RoleEntity getRole() {
+        return role;
+    }
 
+    public void setRole(RoleEntity role) {
+        this.role = role;
+    }
 
     public String getPassword() {
         return password;

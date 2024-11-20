@@ -1,6 +1,8 @@
 package com.ashcollege.service;
 
 
+import com.ashcollege.entities.MaterialEntity;
+import com.ashcollege.entities.UserEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +50,27 @@ public class Persist {
         return this.getQuerySession().get(clazz, oid);
     }
 
-    public <T> List<T> loadList(Class<T> clazz) {
-        return this.sessionFactory.getCurrentSession().createQuery("FROM " + clazz.getSimpleName()).list();
+    public <T> List<T> loadList(Class<T> clazz)
+    {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM " + clazz.getSimpleName()).list();
     }
 
+    public List<MaterialEntity> getMaterialByTitle(String title){
+        return this.getQuerySession()
+                .createQuery("FROM MaterialEntity WHERE title = :title")
+                .setParameter("title",title)
+                .list();
+    }
+//
+//    public List<MaterialEntity> getMaterialByTag(String tag){
+//        return this.sessionFactory.getCurrentSession()
+//                .createQuery("FROM MaterialEntity WHERE MaterialEntity.TagEntity.name = :name")
+//                .setParameter("name",tag)
+//                .list();
+//    }
+
+  /// שאילתא לפי כותרת של חומר, לפי תגית ,ולפי טקסט חופשי
 
 
 }

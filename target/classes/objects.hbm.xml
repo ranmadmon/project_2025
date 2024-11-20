@@ -47,7 +47,7 @@
                      class="com.ashcollege.entities.LecturerEntity"/>
     </class>
 
-    <class name="com.ashcollege.entities.TypeEntity" table="courses" lazy="false">
+    <class name="com.ashcollege.entities.TypeEntity" table="types" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
@@ -67,8 +67,20 @@
         <many-to-one name="courseEntity" column="course_id"
                      class="com.ashcollege.entities.CourseEntity"/>
         <property name="description" column="description" type="java.lang.String"/>
-
+        <many-to-one name="tagEntity" column="tag_id"
+                     class="com.ashcollege.entities.TagEntity"/>
     </class>
 
+
+    <class name="com.ashcollege.entities.QueryHistoryEntity" table="query_history" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="text" type="java.lang.String" column="query"/>
+        <many-to-one name="userEntity" column="user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+
+    </class>
 
 </hibernate-mapping>

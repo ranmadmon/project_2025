@@ -3,6 +3,10 @@ package com.ashcollege.entities;
 public class UserEntity extends BaseEntity {
     private String username;
 
+    public UserEntity () {
+
+    }
+
     public String getUsername() {
         return username;
     }

@@ -62,6 +62,13 @@ public class Persist {
                 .setParameter("title",title)
                 .list();
     }
+
+    public UserEntity getUserByUsername(String username) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE username = :name", UserEntity.class)
+                .setParameter("name", username)
+                .uniqueResult();
+    }
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

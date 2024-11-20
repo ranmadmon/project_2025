@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+§import java.util.List;
 
 @RestController
 public class GeneralController {
@@ -23,8 +24,9 @@ public class GeneralController {
 
     }
     public boolean isUsernameExists(String username){
-        List<UserEntity> users = persist.loadList(user)
-        return true;
+        List<UserEntity> users = persist.loadList(UserEntity.class);
+        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)).toList();
+        return temp.isEmpty();
     }
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object hello() {

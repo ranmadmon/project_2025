@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-§import java.util.List;
+import java.util.List;
 
 @RestController
 public class GeneralController {

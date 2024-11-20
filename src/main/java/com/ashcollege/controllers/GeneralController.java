@@ -32,7 +32,7 @@ public class GeneralController {
 //    public RegisterResponse register(String userName, String password, String name,String lastName,
 //                                     String email,String role){
 //
-//    }
+//    }er
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {

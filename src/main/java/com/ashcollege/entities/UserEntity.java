@@ -5,18 +5,18 @@ import org.apache.catalina.User;
 public class UserEntity extends BaseEntity {
     private String username;
     private RoleEntity role;
-    //  private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
+    private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
     public UserEntity () {
 
     }
 
-//    public String getPasswordRecovery() {
-//        return passwordRecovery;
-//    }
-//
-//    public void setPasswordRecovery(String passwordRecovery) {
-//        this.passwordRecovery = passwordRecovery;
-//    }
+    public String getPasswordRecovery() {
+        return passwordRecovery;
+    }
+
+    public void setPasswordRecovery(String passwordRecovery) {
+        this.passwordRecovery = passwordRecovery;
+    }
 
     public String getUsername() {
         return username;

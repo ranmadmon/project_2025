@@ -24,21 +24,20 @@ public class GeneralController {
     @PostConstruct
     public void init(){
 
-
         System.out.println(persist.getMaterialByTitle("loop"));
 
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role){
-        boolean isExist = false;
+        boolean registeredSuccessfully = true;
         if (!isUsernameExists(userName)){
-            isExist = true;
+            registeredSuccessfully = false;
         }else{
           UserEntity user = new UserEntity(userName,password,name,lastName,email,role);
           this.persist.save(user);
         }
-         return new RegisterResponse(true,200,isExist);
+         return new RegisterResponse(true,200,registeredSuccessfully);
     }
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
@@ -55,6 +54,18 @@ public class GeneralController {
         }
         return response;
     }
+
+    @RequestMapping("/update-password")
+    public boolean updatePassword(String username, String password){
+        UserEntity user = persist.getUserByUsername(username);
+        if (user != null){
+            user.setPassword(password);
+            persist.save(user);
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean isUsernameExists(String username){
         List<UserEntity> users = persist.loadList(UserEntity.class);

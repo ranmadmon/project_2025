@@ -2,6 +2,7 @@ package com.ashcollege.controllers;
 
 import com.ashcollege.entities.UserEntity;
 import com.ashcollege.service.Persist;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class GeneralController {
 
     }
     public boolean isUsernameExists(String username){
+        List<UserEntity> users = persist.loadList(user)
         return true;
     }
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})

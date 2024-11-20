@@ -1,6 +1,7 @@
 package com.ashcollege.controllers;
 
 import com.ashcollege.entities.UserEntity;
+import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +25,11 @@ public class GeneralController {
         System.out.println(persist.getMaterialByTitle("loop"));
 
     }
+//    @RequestMapping("/register")
+//    public RegisterResponse register(String userName, String password, String name,String lastName,
+//                                     String email,String role){
+//
+//    }
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object hello() {

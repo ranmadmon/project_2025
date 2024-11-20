@@ -3,6 +3,7 @@ package com.ashcollege.controllers;
 import com.ashcollege.entities.UserEntity;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.service.Persist;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.List;
 
 @RestController
 public class GeneralController {
@@ -29,7 +32,7 @@ public class GeneralController {
 //    public RegisterResponse register(String userName, String password, String name,String lastName,
 //                                     String email,String role){
 //
-//    } check
+//    }
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {
@@ -47,6 +50,11 @@ public class GeneralController {
         return response;
     }
 
+    public boolean isUsernameExists(String username){
+        List<UserEntity> users = persist.loadList(UserEntity.class);
+        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)).toList();
+        return temp.isEmpty();
+    }
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object hello() {
         return "Hello From Server";

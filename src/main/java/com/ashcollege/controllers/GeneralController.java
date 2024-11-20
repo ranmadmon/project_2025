@@ -18,10 +18,11 @@ public class GeneralController {
     private Persist persist;
 
     @PostConstruct
-//    public void init(){
-//        System.out.println(persist.getMaterialByTitle("loop"));
-//
-//    }
+    public void init(){
+        System.out.println(persist.getMaterialByTitle("loop"));
+
+    }
+
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {
         LoginResponse response = new LoginResponse(false, 400);

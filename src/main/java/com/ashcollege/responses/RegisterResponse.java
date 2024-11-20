@@ -10,5 +10,11 @@ public class RegisterResponse extends BasicResponse{
 
     }
 
+    public boolean isRegisteredSuccessfully() {
+        return registeredSuccessfully;
+    }
 
+    public void setRegisteredSuccessfully(boolean registeredSuccessfully) {
+        this.registeredSuccessfully = registeredSuccessfully;
+    }
 }

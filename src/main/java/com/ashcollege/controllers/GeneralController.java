@@ -32,7 +32,7 @@ public class GeneralController {
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role){
         boolean isExist = false;
-        if (isUsernameExists(userName)){
+        if (!isUsernameExists(userName)){
             isExist = true;
         }else{
           UserEntity user = new UserEntity(userName,password,name,lastName,email,role);

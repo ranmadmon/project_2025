@@ -36,13 +36,12 @@ public class GeneralController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {
-        LoginResponse response = new LoginResponse(false, 400);
+        LoginResponse response = new LoginResponse(true, 400);
         UserEntity user = persist.getUserByUsername(username);
         if (user != null){
-            response.setSuccess(true);
             response.setLoginSuccessful(password.equals(user.getPassword()));
             if (response.isLoginSuccessful()) {
-                response.setErrorCode(0);
+                response.setErrorCode(200);
             } else {
                 response.setErrorCode(401);
             }

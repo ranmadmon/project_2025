@@ -5,6 +5,10 @@ import org.apache.catalina.User;
 public class UserEntity extends BaseEntity {
     private String username;
 
+    public UserEntity () {
+
+    }
+
     public String getUsername() {
         return username;
     }

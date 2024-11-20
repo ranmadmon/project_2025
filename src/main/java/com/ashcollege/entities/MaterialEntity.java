@@ -11,6 +11,9 @@ public class MaterialEntity extends BaseEntity {
     private String description;
     private TagEntity tagEntity;
 
+    public MaterialEntity () {}
+
+
     public TagEntity getTagEntity() {
         return tagEntity;
     }

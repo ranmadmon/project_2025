@@ -55,10 +55,10 @@ public class Persist {
         return this.sessionFactory.getCurrentSession()
                 .createQuery("FROM " + clazz.getSimpleName()).list();
     }
-//
+
     public List<MaterialEntity> getMaterialByTitle(String title){
-        return this.sessionFactory.getCurrentSession()
-                .createQuery("FROM com.ashcollege.entities.MaterialEntity m WHERE m.title = :title")
+        return this.getQuerySession()
+                .createQuery("FROM MaterialEntity WHERE title = :title")
                 .setParameter("title",title)
                 .list();
     }

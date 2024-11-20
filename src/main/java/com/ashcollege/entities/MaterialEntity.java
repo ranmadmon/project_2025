@@ -66,4 +66,17 @@ public class MaterialEntity extends BaseEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "MaterialEntity{" +
+                "title='" + title + '\'' +
+                ", typeEntity=" + typeEntity +
+                ", userEntity=" + userEntity +
+                ", uploadDate=" + uploadDate +
+                ", courseEntity=" + courseEntity +
+                ", description='" + description + '\'' +
+                ", tagEntity=" + tagEntity +
+                '}';
+    }
 }

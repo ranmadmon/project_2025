@@ -56,12 +56,12 @@ public class Persist {
                 .createQuery("FROM " + clazz.getSimpleName()).list();
     }
 //
-//    public List<MaterialEntity> getMaterialByTitle(String title){
-//        return this.sessionFactory.getCurrentSession()
-//                .createQuery("FROM MaterialEntity WHERE MaterialEntity.title = :title")
-//                .setParameter("title",title)
-//                .list();
-//    }
+    public List<MaterialEntity> getMaterialByTitle(String title){
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM com.ashcollege.entities.MaterialEntity m WHERE m.title = :title")
+                .setParameter("title",title)
+                .list();
+    }
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

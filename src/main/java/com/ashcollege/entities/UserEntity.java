@@ -1,5 +1,7 @@
 package com.ashcollege.entities;
 
+import org.apache.catalina.User;
+
 public class UserEntity extends BaseEntity {
     private String username;
 
@@ -16,6 +18,7 @@ public class UserEntity extends BaseEntity {
     private String lastName;
     private String email;
 
+    public UserEntity(){}
     public UserEntity(String username, String password, String firstName, String lastName, String email) {
         this.username = username;
         this.password = password;

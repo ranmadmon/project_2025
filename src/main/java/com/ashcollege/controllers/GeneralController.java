@@ -18,6 +18,9 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
+        UserEntity ram = new UserEntity("ramr", "1234", "ram", "revivo", "ram@");
+        persist.save(ram);
+
         System.out.println(persist.getMaterialByTitle("loop"));
 
     }

@@ -31,13 +31,14 @@ public class UserEntity extends BaseEntity {
     private String lastName;
     private String email;
 
-    public UserEntity(String username, String password, String firstName, String lastName, String email,String role) {
+    public UserEntity(String username, String password, String firstName, String lastName, String email,int roleId) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.role = new RoleEntity(role);
+        this.role = new RoleEntity();
+        this.role.setId(roleId);
     }
 
 

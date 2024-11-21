@@ -25,21 +25,21 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
-        LecturerEntity lecturer = new LecturerEntity("Shai");
-        CourseEntity course= new CourseEntity("Algorithms", "Algo", lecturer.getName());
-        CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
+        CourseEntity course= new CourseEntity("Algorithms", "Algo", 1);
         this.persist.save(course);
-        this.persist.save(course2);
+        //  CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
+        //this.persist.save(course);
+//        this.persist.save(course2);
         //System.out.println(this.persist.loadObject(UserEntity.class,2));
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
-                                     String email, String role){
+                                     String email, int roleId){
         boolean registeredSuccessfully = true;
         if (!isUsernameExists(userName)){
             registeredSuccessfully = false;
         }else{
-          UserEntity user = new UserEntity(userName,password,name,lastName,email,role);
+          UserEntity user = new UserEntity(userName,password,name,lastName,email,roleId);
           this.persist.save(user);
         }
          return new RegisterResponse(true,200,registeredSuccessfully);
@@ -58,7 +58,7 @@ public class GeneralController {
         return this.persist.loadList(CourseEntity.class);
     }
     @RequestMapping("/add-courses")
-    public void addCourses(String name,String description,String lecturer){
+    public void addCourses(String name,String description,int lecturer){
         CourseEntity course = new CourseEntity(name,description,lecturer);
         this.persist.save(course);
     }

@@ -14,4 +14,7 @@ public class LecturerEntity extends BaseEntity{
     public LecturerEntity(String name){
         this.name=name;
     }
+
+    public LecturerEntity() {
+    }
 }

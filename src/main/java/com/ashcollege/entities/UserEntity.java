@@ -80,4 +80,17 @@ public class UserEntity extends BaseEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "username='" + username + '\'' +
+                ", role=" + role +
+                ", passwordRecovery='" + passwordRecovery + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

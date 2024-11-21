@@ -21,6 +21,7 @@
         <property name="lastName" type="string" column="lastName"/>
         <property name="email" type="string" column="email"/>
         <property name="passwordRecovery" type="java.lang.String" column="pass_recovery"/>
+        <many-to-one name="role" column="role_id" class="com.ashcollege.entities.RoleEntity"/>
     </class>
 
     <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">

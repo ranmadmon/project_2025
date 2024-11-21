@@ -1,5 +1,7 @@
 package com.ashcollege.controllers;
 
+import com.ashcollege.entities.CourseEntity;
+import com.ashcollege.entities.LecturerEntity;
 import com.ashcollege.entities.UserEntity;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
@@ -23,9 +25,7 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
-
-        System.out.println(persist.getMaterialByTitle("loop"));
-
+        System.out.println(this.persist.loadObject(UserEntity.class,2));
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
@@ -40,12 +40,39 @@ public class GeneralController {
          return new RegisterResponse(true,200,registeredSuccessfully);
     }
 
+
+
+    @RequestMapping("/get-lecturers")
+    public List<LecturerEntity> getLecturers(){
+        return this.persist.loadList(LecturerEntity.class);
+    }
+
+
+    @RequestMapping("/get-all-courses")
+    public List<CourseEntity> getAllCourses(){
+        return this.persist.loadList(CourseEntity.class);
+    }
+    @RequestMapping("/add-courses")
+    public void addCourses(String name,String description,String lecturer){
+        CourseEntity course = new CourseEntity(name,description,lecturer);
+        this.persist.save(course);
+    }
+
+    @RequestMapping("/add-lecturer")
+    public void addLecturer(String name){
+        LecturerEntity lecturerEntity= new LecturerEntity(name);
+        this.persist.save(lecturerEntity);
+    }
+
+
+
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {
         LoginResponse response = new LoginResponse(true, 400);
         UserEntity user = persist.getUserByUsername(username);
         if (user != null){
             response.setLoginSuccessful(password.equals(user.getPassword()));
+            response.setPermission(user.getRole().getId());
             if (response.isLoginSuccessful()) {
                 response.setErrorCode(200);
             } else {

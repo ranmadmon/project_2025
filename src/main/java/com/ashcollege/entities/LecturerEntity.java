@@ -10,4 +10,8 @@ public class LecturerEntity extends BaseEntity{
     public void setName(String name) {
         this.name = name;
     }
+
+    public LecturerEntity(String name){
+        this.name=name;
+    }
 }

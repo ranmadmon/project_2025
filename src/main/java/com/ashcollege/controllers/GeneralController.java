@@ -55,6 +55,7 @@ public class GeneralController {
 
     @RequestMapping("/get-all-courses")
     public List<CourseEntity> getAllCourses(){
+        System.out.println(this.persist.loadList(CourseEntity.class));
         return this.persist.loadList(CourseEntity.class);
     }
     @RequestMapping("/add-courses")

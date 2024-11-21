@@ -25,7 +25,12 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
-        System.out.println(this.persist.loadObject(UserEntity.class,2));
+        LecturerEntity lecturer = new LecturerEntity("Shai");
+        CourseEntity course= new CourseEntity("Algorithms", "Algo", lecturer.getName());
+        CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
+        this.persist.save(course);
+        this.persist.save(course2);
+        //System.out.println(this.persist.loadObject(UserEntity.class,2));
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,

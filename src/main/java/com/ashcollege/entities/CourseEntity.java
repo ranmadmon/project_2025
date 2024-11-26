@@ -9,6 +9,9 @@ public class CourseEntity extends BaseEntity{
         return lecturerEntity;
     }
 
+    public CourseEntity() {
+    }
+
     public CourseEntity(String name, String description, int lecturerId) {
         this.name = name;
         this.description = description;

@@ -25,20 +25,27 @@ public class UserEntity extends BaseEntity {
     public void setUsername(String username) {
         this.username = username;
     }
-
     private String password;
     private String firstName;
     private String lastName;
     private String email;
 
-    public UserEntity(String username, String password, String firstName, String lastName, String email,int roleId) {
+    public UserEntity(String username, String password, String firstName, String lastName, String email,String role) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = new RoleEntity();
-        this.role.setId(roleId);
+        setTheRole(role);
+    }
+
+    private void setTheRole(String role) {
+        switch (role){
+            case "Student" -> this.role.setId(1);
+            case "Lecturer" -> this.role.setId(2);
+            case "Admin" -> this.role.setId(3);
+        }
     }
 
 

@@ -27,6 +27,7 @@ public class GeneralController {
     public void init(){
         CourseEntity course= new CourseEntity("Algorithms", "Algo", 1);
         this.persist.save(course);
+        getAllCourses();
         //  CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
         //this.persist.save(course);
 //        this.persist.save(course2);
@@ -34,12 +35,12 @@ public class GeneralController {
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
-                                     String email, int roleId){
+                                     String email, String role){
         boolean registeredSuccessfully = true;
         if (!isUsernameExists(userName)){
             registeredSuccessfully = false;
         }else{
-          UserEntity user = new UserEntity(userName,password,name,lastName,email,roleId);
+          UserEntity user = new UserEntity(userName,password,name,lastName,email,role);
           this.persist.save(user);
         }
          return new RegisterResponse(true,200,registeredSuccessfully);

@@ -57,7 +57,7 @@ public class GeneralController {
         System.out.println(this.persist.loadList(CourseEntity.class));
         return this.persist.loadList(CourseEntity.class);
     }
-    @RequestMapping("/add-courses")
+    @RequestMapping("/add-course")
     public void addCourses(String name,String description,int lecturer){
         CourseEntity course = new CourseEntity(name,description,lecturer);
         this.persist.save(course);

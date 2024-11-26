@@ -60,6 +60,7 @@ public class GeneralController {
     @RequestMapping("/add-course")
     public void addCourses(String name,String description,int lecturer){
         CourseEntity course = new CourseEntity(name,description,lecturer);
+        System.out.println("!!!!!!!!1" + course);
         this.persist.save(course);
     }
 

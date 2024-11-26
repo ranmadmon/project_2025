@@ -9,6 +9,15 @@ public class CourseEntity extends BaseEntity{
         return lecturerEntity;
     }
 
+    @Override
+    public String toString() {
+        return "CourseEntity{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", lecturerEntity=" + lecturerEntity +
+                '}';
+    }
+
     public CourseEntity() {
     }
 

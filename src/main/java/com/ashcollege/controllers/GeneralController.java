@@ -25,9 +25,7 @@ public class GeneralController {
 
     @PostConstruct
     public void init(){
-        CourseEntity course= new CourseEntity("Algorithms", "Algo", 1);
-        this.persist.save(course);
-        getAllCourses();
+
         //  CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
         //this.persist.save(course);
 //        this.persist.save(course2);

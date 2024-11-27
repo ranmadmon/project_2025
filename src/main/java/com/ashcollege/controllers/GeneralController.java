@@ -6,6 +6,7 @@ import com.ashcollege.entities.UserEntity;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
+import com.ashcollege.utils.GeneralUtils;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,7 +39,8 @@ public class GeneralController {
         if (!isUsernameExists(userName)){
             registeredSuccessfully = false;
         }else{
-          UserEntity user = new UserEntity(userName,password,name,lastName,email,role);
+            String hashed = GeneralUtils.hashMd5(password);
+          UserEntity user = new UserEntity(userName,hashed,name,lastName,email,role);
           this.persist.save(user);
         }
          return new RegisterResponse(true,200,registeredSuccessfully);
@@ -77,8 +79,9 @@ public class GeneralController {
         LoginResponse response = new LoginResponse(true, 400);
         UserEntity user = persist.getUserByUsername(username);
         if (user != null){
-            response.setLoginSuccessful(password.equals(user.getPassword()));
+            response.setLoginSuccessful(GeneralUtils.hashMd5(password).equals(user.getPassword()));
             response.setPermission(user.getRole().getId());
+            response.setToken(GeneralUtils.hashMd5(password));
             if (response.isLoginSuccessful()) {
                 response.setErrorCode(200);
             } else {

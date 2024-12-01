@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+
+<hibernate-mapping>
+
+    <class name="com.ashcollege.entities.RoleEntity" table="roles" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+    <class name="com.ashcollege.entities.UserEntity" table="users" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="username" type="string" column="username"/>
+        <property name="password" type="string" column="password"/>
+        <property name="firstName" type="string" column="firstName"/>
+        <property name="lastName" type="string" column="lastName"/>
+        <property name="email" type="string" column="email"/>
+        <property name="passwordRecovery" type="java.lang.String" column="pass_recovery"/>
+        <many-to-one name="role" column="role_id" class="com.ashcollege.entities.RoleEntity"/>
+<!--        <set name="course" table="user_courses" lazy="true">-->
+<!--            <key column="user_id"/>-->
+<!--            <many-to-many column="course_id" class="com.ashcollege.entities.CourseEntity"/>-->
+<!--        </set>-->
+
+    </class>
+
+    <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+
+    <class name="com.ashcollege.entities.LecturerEntity" table="lecturers" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+
+
+    <class name="com.ashcollege.entities.CourseEntity" table="courses" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+        <property name="description" type="java.lang.String" column="description"/>
+        <many-to-one name="lecturerEntity" column="lecturer_id"
+                     class="com.ashcollege.entities.LecturerEntity"/>
+
+<!--        <set name="user" table="user_courses" lazy="true">-->
+<!--            <key column="course_id"/>-->
+<!--            <many-to-many column="user_id" class="com.ashcollege.entities.UserEntity"/>-->
+<!--        </set>-->
+    </class>
+
+    <class name="com.ashcollege.entities.TypeEntity" table="types" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" type="string" column="name"/>
+    </class>
+
+    <class name="com.ashcollege.entities.MaterialEntity" table="materials" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="title" column="title" type="java.lang.String"/>
+        <many-to-one name="typeEntity" column="type_id"
+                     class="com.ashcollege.entities.TypeEntity"/>
+        <many-to-one name="userEntity" column="user_id"
+                     class="com.ashcollege.entities.UserEntity"/>
+        <property name="uploadDate" column="date" type="java.util.Date"/>
+        <many-to-one name="courseEntity" column="course_id"
+                     class="com.ashcollege.entities.CourseEntity"/>
+        <property name="description" column="description" type="java.lang.String"/>
+        <many-to-one name="tagEntity" column="tag_id"
+                     class="com.ashcollege.entities.TagEntity"/>
+    </class>
+
+
+    <class name="com.ashcollege.entities.QueryHistoryEntity" table="query_history" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="text" type="java.lang.String" column="query"/>
+        <many-to-one name="userEntity" column="user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+
+    </class>
+
+</hibernate-mapping>

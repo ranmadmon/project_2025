@@ -1,8 +1,6 @@
 package com.ashcollege.controllers;
 
-import com.ashcollege.entities.CourseEntity;
-import com.ashcollege.entities.LecturerEntity;
-import com.ashcollege.entities.UserEntity;
+import com.ashcollege.entities.*;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
@@ -31,6 +29,19 @@ public class GeneralController {
         //this.persist.save(course);
 //        this.persist.save(course2);
         //System.out.println(this.persist.loadObject(UserEntity.class,2));
+    }
+    @RequestMapping("/get-course")
+    public CourseEntity getCourse(int id){
+        return this.persist.loadObject(CourseEntity.class,id);
+    }
+    @RequestMapping("/get-materials")
+    public List<MaterialEntity> getMaterials(){
+        return this.persist.loadList(MaterialEntity.class);
+    }
+
+    @RequestMapping("/get-notifications")
+    public List<QueryHistoryEntity> getQueryHistory(){
+        return this.persist.loadList(QueryHistoryEntity.class);
     }
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
@@ -76,11 +87,11 @@ public class GeneralController {
     public LoginResponse login(String username, String password) {
 
         LoginResponse response = new LoginResponse();
-        UserEntity user = persist.getUserByUsername(username);
+        String hash = GeneralUtils.hashMd5(password);
+        UserEntity user = persist.getUserByUsername(username,hash);
         if (user != null){
-            response.setSuccess(GeneralUtils.hashMd5(password).equals(user.getPassword()));
+            response.setSuccess(true);
             response.setPermission(user.getRole().getId());
-            String hash = GeneralUtils.hashMd5(password);
             System.out.println(hash);
             response.setToken(hash);
             if (response.isSuccess()) {
@@ -95,7 +106,7 @@ public class GeneralController {
 
     @RequestMapping("/update-password")
     public boolean updatePassword(String username, String password){
-        UserEntity user = persist.getUserByUsername(username);
+        UserEntity user = persist.getUserByUsername(username,password);
         if (user != null){
             user.setPassword(password);
             persist.save(user);

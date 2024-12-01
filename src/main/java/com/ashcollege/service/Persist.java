@@ -63,10 +63,11 @@ public class Persist {
                 .list();
     }
 
-    public UserEntity getUserByUsername(String username) {
+    public UserEntity getUserByUsername(String username,String password) {
         return this.sessionFactory.getCurrentSession()
-                .createQuery("FROM UserEntity WHERE username = :name", UserEntity.class)
+                .createQuery("FROM UserEntity WHERE username = :name and password = :password", UserEntity.class)
                 .setParameter("name", username)
+                .setParameter("password",password)
                 .uniqueResult();
     }
 //

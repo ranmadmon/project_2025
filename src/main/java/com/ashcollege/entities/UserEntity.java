@@ -2,12 +2,23 @@ package com.ashcollege.entities;
 
 import org.apache.catalina.User;
 
+import java.util.List;
+
 public class UserEntity extends BaseEntity {
     private String username;
     private RoleEntity role;
+    private CourseEntity course;
     private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
     public UserEntity () {
 
+    }
+
+    public CourseEntity getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseEntity course) {
+        this.course = course;
     }
 
     public String getPasswordRecovery() {

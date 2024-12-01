@@ -1,12 +1,22 @@
 package com.ashcollege.entities;
 
+import java.util.List;
+
 public class CourseEntity extends BaseEntity{
     private  String name;
     private String description;
     private LecturerEntity lecturerEntity;
-
+    private UserEntity user;
     public LecturerEntity getLecturerEntity() {
         return lecturerEntity;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     @Override

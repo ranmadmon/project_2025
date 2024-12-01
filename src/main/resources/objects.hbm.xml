@@ -22,6 +22,11 @@
         <property name="email" type="string" column="email"/>
         <property name="passwordRecovery" type="java.lang.String" column="pass_recovery"/>
         <many-to-one name="role" column="role_id" class="com.ashcollege.entities.RoleEntity"/>
+<!--        <set name="course" table="user_courses" lazy="true">-->
+<!--            <key column="user_id"/>-->
+<!--            <many-to-many column="course_id" class="com.ashcollege.entities.CourseEntity"/>-->
+<!--        </set>-->
+
     </class>
 
     <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">
@@ -47,6 +52,11 @@
         <property name="description" type="java.lang.String" column="description"/>
         <many-to-one name="lecturerEntity" column="lecturer_id"
                      class="com.ashcollege.entities.LecturerEntity"/>
+
+<!--        <set name="user" table="user_courses" lazy="true">-->
+<!--            <key column="course_id"/>-->
+<!--            <many-to-many column="user_id" class="com.ashcollege.entities.UserEntity"/>-->
+<!--        </set>-->
     </class>
 
     <class name="com.ashcollege.entities.TypeEntity" table="types" lazy="false">

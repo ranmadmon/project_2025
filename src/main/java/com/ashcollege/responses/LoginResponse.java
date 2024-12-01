@@ -1,7 +1,6 @@
 package com.ashcollege.responses;
 
 public class LoginResponse extends BasicResponse{
-    private boolean loginSuccessful;
     private int permission;
     private String token;
 
@@ -13,16 +12,10 @@ public class LoginResponse extends BasicResponse{
         this.permission = permission;
     }
 
-    public LoginResponse(boolean success, Integer errorCode) {
-        super(success, errorCode);
-    }
-    public boolean isLoginSuccessful() {
-        return loginSuccessful;
+    public LoginResponse() {
+
     }
 
-    public void setLoginSuccessful(boolean loginSuccessful) {
-        this.loginSuccessful = loginSuccessful;
-    }
 
     public String getToken() {
         return token;

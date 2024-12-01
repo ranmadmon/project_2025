@@ -56,13 +56,11 @@ public class GeneralController {
 
     @RequestMapping("/get-all-courses")
     public List<CourseEntity> getAllCourses(){
-        System.out.println(this.persist.loadList(CourseEntity.class));
         return this.persist.loadList(CourseEntity.class);
     }
     @RequestMapping("/add-course")
     public void addCourses(String name,String description,int lecturer){
         CourseEntity course = new CourseEntity(name,description,lecturer);
-        System.out.println("!!!!!!!!1" + course);
         this.persist.save(course);
     }
 
@@ -76,18 +74,22 @@ public class GeneralController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public LoginResponse login(String username, String password) {
-        LoginResponse response = new LoginResponse(true, 400);
+
+        LoginResponse response = new LoginResponse();
         UserEntity user = persist.getUserByUsername(username);
         if (user != null){
-            response.setLoginSuccessful(GeneralUtils.hashMd5(password).equals(user.getPassword()));
+            response.setSuccess(GeneralUtils.hashMd5(password).equals(user.getPassword()));
             response.setPermission(user.getRole().getId());
-            response.setToken(GeneralUtils.hashMd5(password));
-            if (response.isLoginSuccessful()) {
+            String hash = GeneralUtils.hashMd5(password);
+            System.out.println(hash);
+            response.setToken(hash);
+            if (response.isSuccess()) {
                 response.setErrorCode(200);
             } else {
                 response.setErrorCode(401);
             }
         }
+
         return response;
     }
 

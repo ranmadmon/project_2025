@@ -5,7 +5,6 @@ import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
 import com.ashcollege.utils.GeneralUtils;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.List;
 
 @RestController
@@ -52,11 +50,15 @@ public class GeneralController {
     public List<MaterialEntity> getMaterialsByCourseId(int courseId){
         return persist.getMaterialByCourseId(courseId);
     }
-//    @RequestMapping("/add-material")
-//    void addMaterial(String title,String type,String username,
-//                     String token,String courseName,String description,String tag,String content){
-//
-//    }
+    @RequestMapping("/add-material")
+    void addMaterial(String title,String type,String username,
+                     String token,int courseId,String description,String tag,String content){
+        int userId = this.persist.getUserByUsernameAndPass(username,token).getId();
+        MaterialEntity materialEntity = new MaterialEntity(title,type,userId,courseId,description,tag,content);
+        this.persist.save(materialEntity);
+
+    }
+
 
     @RequestMapping("/get-notifications")
     public List<QueryHistoryEntity> getQueryHistory(){
@@ -107,7 +109,7 @@ public class GeneralController {
 
         LoginResponse response = new LoginResponse();
         String hash = GeneralUtils.hashMd5(password);
-        UserEntity user = persist.getUserByUsername(username,hash);
+        UserEntity user = persist.getUserByUsernameAndPass(username,hash);
         if (user != null){
             response.setSuccess(true);
             response.setPermission(user.getRole().getId());
@@ -125,7 +127,7 @@ public class GeneralController {
 
     @RequestMapping("/update-password")
     public boolean updatePassword(String username, String password){
-        UserEntity user = persist.getUserByUsername(username,password);
+        UserEntity user = persist.getUserByUsernameAndPass(username,password);
         if (user != null){
             user.setPassword(password);
             persist.save(user);

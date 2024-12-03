@@ -53,6 +53,15 @@ public class GeneralController {
     @RequestMapping("/add-material")
     void addMaterial(String title,String type,String username,
                      String token,int courseId,String description,String tag,String content){
+        System.out.println("tryy");
+        System.out.println("Title: " + title);
+        System.out.println("Type: " + type);
+        System.out.println("Username: " + username);
+        System.out.println("Token: " + token);
+        System.out.println("Course ID: " + courseId);
+        System.out.println("Description: " + description);
+        System.out.println("Tag: " + tag);
+        System.out.println("Content: " + content);
         int userId = this.persist.getUserByUsernameAndPass(username,token).getId();
         MaterialEntity materialEntity = new MaterialEntity(title,type,userId,courseId,description,tag,content);
         this.persist.save(materialEntity);

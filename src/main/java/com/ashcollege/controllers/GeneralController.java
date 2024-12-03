@@ -34,6 +34,16 @@ public class GeneralController {
     public CourseEntity getCourse(int id){
         return this.persist.loadObject(CourseEntity.class,id);
     }
+    @RequestMapping("/get-types")
+    List<TypeEntity> getAllTypes(){
+         return this.persist.loadList(TypeEntity.class);
+    }
+
+    @RequestMapping("/get-tags")
+    List<TagEntity> getAllTags(){
+        return this.persist.loadList(TagEntity.class);
+    }
+
     @RequestMapping("/get-materials")
     public List<MaterialEntity> getMaterials(){
         return this.persist.loadList(MaterialEntity.class);

@@ -70,6 +70,13 @@ public class Persist {
                 .setParameter("password",password)
                 .uniqueResult();
     }
+
+    public List<MaterialEntity> getMaterialByCourseId(int courseId) {
+        return this.getQuerySession()
+                .createQuery("FROM MaterialEntity WHERE course_id = :course_id")
+                .setParameter("course_id",courseId)
+                .list();
+    }
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

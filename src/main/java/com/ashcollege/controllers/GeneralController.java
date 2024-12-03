@@ -38,6 +38,10 @@ public class GeneralController {
     public List<MaterialEntity> getMaterials(){
         return this.persist.loadList(MaterialEntity.class);
     }
+    @RequestMapping("/get-materials-by-course-id")
+    public List<MaterialEntity> getMaterialsByCourseId(int courseId){
+        return persist.getMaterialByCourseId(courseId);
+    }
 
     @RequestMapping("/get-notifications")
     public List<QueryHistoryEntity> getQueryHistory(){

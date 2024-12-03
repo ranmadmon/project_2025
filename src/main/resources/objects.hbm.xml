@@ -73,6 +73,7 @@
         <property name="title" column="title" type="java.lang.String"/>
         <many-to-one name="typeEntity" column="type_id"
                      class="com.ashcollege.entities.TypeEntity"/>
+        <property name="content" column="content" type="java.lang.String"/>
         <many-to-one name="userEntity" column="user_id"
                      class="com.ashcollege.entities.UserEntity"/>
         <property name="uploadDate" column="date" type="java.util.Date"/>

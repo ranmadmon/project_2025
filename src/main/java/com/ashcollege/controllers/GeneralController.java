@@ -52,6 +52,10 @@ public class GeneralController {
     public List<MaterialEntity> getMaterialsByCourseId(int courseId){
         return persist.getMaterialByCourseId(courseId);
     }
+    @RequestMapping("/add-material")
+    void addMaterial(){
+
+    }
 
     @RequestMapping("/get-notifications")
     public List<QueryHistoryEntity> getQueryHistory(){

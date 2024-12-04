@@ -71,15 +71,6 @@ public class Persist {
                 .uniqueResult();
     }
 
-    public UserEntity getUserByOtp(String username, String password,String otp) {
-        return this.sessionFactory.getCurrentSession()
-                .createQuery("FROM UserEntity WHERE username = :name and password = :password and otp = :otp", UserEntity.class)
-                .setParameter("name", username)
-                .setParameter("password",password)
-                .setParameter("otp",otp)
-                .uniqueResult();
-    }
-
     public List<MaterialEntity> getMaterialByCourseId(int courseId) {
         return this.getQuerySession()
                 .createQuery("FROM MaterialEntity WHERE course_id = :course_id")

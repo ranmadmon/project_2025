@@ -1,9 +1,11 @@
 package com.ashcollege.controllers;
 
 import com.ashcollege.entities.*;
+import com.ashcollege.responses.BasicResponse;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
+import com.ashcollege.utils.ApiUtils;
 import com.ashcollege.utils.GeneralUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -122,19 +124,38 @@ public class GeneralController {
 
         LoginResponse response = new LoginResponse();
         String hash = GeneralUtils.hashMd5(password);
-        UserEntity user = persist.getUserByOtp(username, hash,otp);
+        UserEntity user = persist.getUserByUsernameAndPass(username, hash);
         if (user != null) {
-            response.setSuccess(true);
-            response.setPermission(user.getRole().getId());
-            System.out.println(hash);
-            response.setToken(hash);
-            if (response.isSuccess()) {
-                response.setErrorCode(200);
-            } else {
-                response.setErrorCode(401);
+            if (user.getOtp().equals(otp)){
+                response.setSuccess(true);
+                response.setPermission(user.getRole().getId());
+                System.out.println(hash);
+                response.setToken(hash);
+                if (response.isSuccess()) {
+                    response.setErrorCode(200);
+                } else {
+                    response.setErrorCode(401);
+                }
             }
+            user.setOtp("");
+            persist.save(user);
         }
 
+        return response;
+    }
+    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
+    public BasicResponse login(String username, String password){
+        BasicResponse response = new BasicResponse();
+        String hash = GeneralUtils.hashMd5(password);
+        UserEntity user = persist.getUserByUsernameAndPass(username, hash);
+        if (user != null){
+            String otp = GeneralUtils.generateOtp();
+            user.setOtp(otp);
+            persist.save(user);
+            response.setSuccess(true);
+            response.setErrorCode(200);
+            ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
+        }
         return response;
     }
 

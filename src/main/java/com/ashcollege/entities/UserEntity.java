@@ -138,4 +138,8 @@ public class UserEntity extends BaseEntity {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 }

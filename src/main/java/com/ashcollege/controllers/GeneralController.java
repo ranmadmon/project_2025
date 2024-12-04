@@ -59,18 +59,40 @@ public class GeneralController {
     @RequestMapping("/add-material")
     void addMaterial(String title, String type, String username,
                      String token, int courseId, String description, String tag, String content) {
-        System.out.println("tryy");
-        System.out.println("Title: " + title);
-        System.out.println("Type: " + type);
-        System.out.println("Username: " + username);
-        System.out.println("Token: " + token);
-        System.out.println("Course ID: " + courseId);
-        System.out.println("Description: " + description);
-        System.out.println("Tag: " + tag);
-        System.out.println("Content: " + content);
         int userId = this.persist.getUserByUsernameAndPass(username, token).getId();
         MaterialEntity materialEntity = new MaterialEntity(title, type, userId, courseId, description, tag, content);
         this.persist.save(materialEntity);
+
+    }
+
+    @RequestMapping("/recovery-password")
+    public BasicResponse recoveryPassword(String email){
+        boolean isExist = false;
+        int errorCode = 401;
+        UserEntity user = this.persist.getUserByEmail(email);
+        if (user!=null){
+            isExist = true;
+            errorCode  =200;
+            String otp = GeneralUtils.generateOtp();
+        RecoveryEntity recovery = new RecoveryEntity(user.getFullName(),otp,email);
+        user.setPasswordRecovery(otp);
+        this.persist.save(user);
+        this.persist.save(recovery);
+        }
+        return new BasicResponse(isExist,errorCode);
+    }
+
+    @RequestMapping("/check-recovery-password")
+     public BasicResponse checkRecoveryPassword(String email,String pass_recovery){
+        boolean isValidPass = false;
+        int errorCode = 401;
+        UserEntity user = this.persist.getUserByEmailAndPasswordRecovery(email,pass_recovery);
+        if (user!=null){
+            user.setPasswordRecovery("");
+            isValidPass  =true;
+            errorCode = 200;
+        }
+        return new BasicResponse(isValidPass,errorCode);
 
     }
 
@@ -84,7 +106,7 @@ public class GeneralController {
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role) {
         boolean registeredSuccessfully = true;
-        if (!isUsernameExists(userName)) {
+        if (!isUsernameOrEmailExists(userName,email)) {
             registeredSuccessfully = false;
         } else {
             String hashed = GeneralUtils.hashMd5(password);
@@ -161,20 +183,23 @@ public class GeneralController {
     //
 
     @RequestMapping("/update-password")
-    public boolean updatePassword(String username, String password) {
-        UserEntity user = persist.getUserByUsernameAndPass(username, password);
+    public BasicResponse updatePassword(String username, String password) {
+        boolean isExist = false;
+        int errorCode = 401;
+        UserEntity user = persist.getUserByUsername(username);
         if (user != null) {
             user.setPassword(password);
             persist.save(user);
-            return true;
+            isExist = true;
+            errorCode = 200;
         }
-        return false;
+        return new BasicResponse(isExist,errorCode);
     }
 
 
-    public boolean isUsernameExists(String username) {
+    public boolean isUsernameOrEmailExists(String username, String email) {
         List<UserEntity> users = persist.loadList(UserEntity.class);
-        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)).toList();
+        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)||user.getEmail().equals(email)).toList();
         return temp.isEmpty();
     }
 

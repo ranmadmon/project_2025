@@ -7,6 +7,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class GeneralUtils {
+    private static final int OTP_MIN_VALUE = 100000;
+    private static final int OTP_MAX_VALUE = 999999;
+
+
 
     public static String hashMd5 (String source) {
         try {
@@ -17,8 +21,8 @@ public class GeneralUtils {
             throw new RuntimeException(e);
         }
     }
-    public static String generateOtp(){
+    public static String generateOtp() {
         Random random = new Random();
-        return String.valueOf(random.nextInt(100000, 999999));
+        return String.valueOf(random.nextInt(OTP_MIN_VALUE, OTP_MAX_VALUE ));
     }
 }

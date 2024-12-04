@@ -77,6 +77,28 @@ public class Persist {
                 .setParameter("course_id",courseId)
                 .list();
     }
+
+    public UserEntity getUserByEmail(String email) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE email = :email ", UserEntity.class)
+                .setParameter("email", email)
+                .uniqueResult();
+    }
+
+    public UserEntity getUserByEmailAndPasswordRecovery(String email, String pass_recovery) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE email = :email and pass_recovery = :pass_recovery", UserEntity.class)
+                .setParameter("email", email)
+                .setParameter("pass_recovery" ,pass_recovery)
+                .uniqueResult();
+    }
+
+    public UserEntity getUserByUsername(String username) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE username = :name", UserEntity.class)
+                .setParameter("name", username)
+                .uniqueResult();
+    }
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

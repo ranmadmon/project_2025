@@ -97,5 +97,18 @@
                      class="com.ashcollege.entities.UserEntity" />
 
     </class>
+    <class name="com.ashcollege.entities.NotificationEntity" table="notification" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="fromUser" column="from_user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+        <many-to-one name="toUser" column="to_user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+        <property name="title" type="java.lang.String" column="title"/>
+        <property name="content" type="java.lang.String" column="content"/>
+        <property name="date" type="java.util.Date" column="time_stamp"/>
+
+    </class>
 
 </hibernate-mapping>

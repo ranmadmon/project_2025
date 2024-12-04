@@ -6,6 +6,7 @@ import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
 import com.ashcollege.service.Persist;
 import com.ashcollege.utils.ApiUtils;
+import com.ashcollege.utils.Constants;
 import com.ashcollege.utils.GeneralUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,11 +69,11 @@ public class GeneralController {
     @RequestMapping("/recovery-password")
     public BasicResponse recoveryPassword(String email){
         boolean isExist = false;
-        int errorCode = 401;
+        int errorCode = Constants.FAIL;
         UserEntity user = this.persist.getUserByEmail(email);
         if (user!=null){
             isExist = true;
-            errorCode  =200;
+            errorCode  =Constants.SUCCESS;
             String otp = GeneralUtils.generateOtp();
         RecoveryEntity recovery = new RecoveryEntity(user.getFullName(),otp,email);
         user.setPasswordRecovery(otp);
@@ -85,12 +86,12 @@ public class GeneralController {
     @RequestMapping("/check-recovery-password")
      public BasicResponse checkRecoveryPassword(String email,String pass_recovery){
         boolean isValidPass = false;
-        int errorCode = 401;
+        int errorCode = Constants.FAIL;
         UserEntity user = this.persist.getUserByEmailAndPasswordRecovery(email,pass_recovery);
         if (user!=null){
             user.setPasswordRecovery("");
             isValidPass  =true;
-            errorCode = 200;
+            errorCode = Constants.SUCCESS;
         }
         return new BasicResponse(isValidPass,errorCode);
 
@@ -106,14 +107,16 @@ public class GeneralController {
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role) {
         boolean registeredSuccessfully = true;
+        int errorCode = Constants.SUCCESS;
         if (!isUsernameOrEmailExists(userName,email)) {
             registeredSuccessfully = false;
+            errorCode = Constants.FAIL;
         } else {
             String hashed = GeneralUtils.hashMd5(password);
             UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role);
             this.persist.save(user);
         }
-        return new RegisterResponse(true, 200, registeredSuccessfully);
+        return new RegisterResponse(true, errorCode, registeredSuccessfully);
     }
 
 
@@ -154,9 +157,9 @@ public class GeneralController {
                 System.out.println(hash);
                 response.setToken(hash);
                 if (response.isSuccess()) {
-                    response.setErrorCode(200);
+                    response.setErrorCode(Constants.SUCCESS);
                 } else {
-                    response.setErrorCode(401);
+                    response.setErrorCode(Constants.FAIL);
                 }
             }
             user.setOtp("");
@@ -175,7 +178,7 @@ public class GeneralController {
             user.setOtp(otp);
             persist.save(user);
             response.setSuccess(true);
-            response.setErrorCode(200);
+            response.setErrorCode(Constants.SUCCESS);
             ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
         }
         return response;
@@ -185,13 +188,13 @@ public class GeneralController {
     @RequestMapping("/update-password")
     public BasicResponse updatePassword(String username, String password) {
         boolean isExist = false;
-        int errorCode = 401;
+            int errorCode = Constants.FAIL;
         UserEntity user = persist.getUserByUsername(username);
         if (user != null) {
             user.setPassword(password);
             persist.save(user);
             isExist = true;
-            errorCode = 200;
+            errorCode = Constants.SUCCESS;
         }
         return new BasicResponse(isExist,errorCode);
     }

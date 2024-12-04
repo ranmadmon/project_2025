@@ -19,6 +19,7 @@
         <property name="password" type="string" column="password"/>
         <property name="firstName" type="string" column="firstName"/>
         <property name="lastName" type="string" column="lastName"/>
+        <property name="recovery" column="recovery" type="java.lang.Boolean"/>
         <property name="email" type="string" column="email"/>
         <property name="phoneNumber" type="java.lang.String" column="phone"/>
         <property name="otp" type="java.lang.String" column="otp"/>
@@ -84,6 +85,7 @@
         <property name="description" column="description" type="java.lang.String"/>
         <many-to-one name="tagEntity" column="tag_id"
                      class="com.ashcollege.entities.TagEntity"/>
+
     </class>
 
 
@@ -95,6 +97,19 @@
         <property name="text" type="java.lang.String" column="query"/>
         <many-to-one name="userEntity" column="user_id"
                      class="com.ashcollege.entities.UserEntity" />
+
+    </class>
+    <class name="com.ashcollege.entities.NotificationEntity" table="notification" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="fromUser" column="from_user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+        <many-to-one name="course" column="course_id"
+                     class="com.ashcollege.entities.CourseEntity" />
+        <property name="title" type="java.lang.String" column="title"/>
+        <property name="content" type="java.lang.String" column="content"/>
+        <property name="date" type="java.util.Date" column="time_stamp"/>
 
     </class>
 

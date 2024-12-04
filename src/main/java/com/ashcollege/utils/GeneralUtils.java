@@ -4,6 +4,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class GeneralUtils {
 
@@ -15,5 +16,9 @@ public class GeneralUtils {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static String generateOtp(){
+        Random random = new Random();
+        return String.valueOf(random.nextInt(100000, 999999));
     }
 }

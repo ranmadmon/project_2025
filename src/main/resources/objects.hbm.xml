@@ -103,8 +103,8 @@
         </id>
         <many-to-one name="fromUser" column="from_user_id"
                      class="com.ashcollege.entities.UserEntity" />
-        <many-to-one name="toUser" column="to_user_id"
-                     class="com.ashcollege.entities.UserEntity" />
+        <many-to-one name="course" column="course_id"
+                     class="com.ashcollege.entities.CourseEntity" />
         <property name="title" type="java.lang.String" column="title"/>
         <property name="content" type="java.lang.String" column="content"/>
         <property name="date" type="java.util.Date" column="time_stamp"/>

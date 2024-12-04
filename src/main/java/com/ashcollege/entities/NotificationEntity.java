@@ -4,12 +4,18 @@ import java.util.Date;
 
 public class NotificationEntity extends BaseEntity{
     private UserEntity fromUser;
-    private UserEntity toUser;
+    private CourseEntity course;
     private String title;
     private String content;
     private Date date;
 
+    public CourseEntity getCourse() {
+        return course;
+    }
 
+    public void setCourse(CourseEntity course) {
+        this.course = course;
+    }
 
     public Date getDate() {
         return date;
@@ -35,13 +41,7 @@ public class NotificationEntity extends BaseEntity{
         this.title = title;
     }
 
-    public UserEntity getToUser() {
-        return toUser;
-    }
 
-    public void setToUser(UserEntity toUser) {
-        this.toUser = toUser;
-    }
 
     public UserEntity getFromUser() {
         return fromUser;

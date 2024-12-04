@@ -7,10 +7,28 @@ import java.util.List;
 public class UserEntity extends BaseEntity {
     private String username;
     private RoleEntity role;
+    private String phoneNumber;
+    private String otp;
     private CourseEntity course;
     private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
     public UserEntity () {
 
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 
     public CourseEntity getCourse() {

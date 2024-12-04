@@ -117,12 +117,12 @@ public class GeneralController {
     }
 
 
-    @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
-    public LoginResponse login(String username, String password) {
+    @RequestMapping(value = "/check-otp", method = {RequestMethod.GET, RequestMethod.POST})
+    public LoginResponse checkOtp(String username, String password,String otp) {
 
         LoginResponse response = new LoginResponse();
         String hash = GeneralUtils.hashMd5(password);
-        UserEntity user = persist.getUserByUsernameAndPass(username, hash);
+        UserEntity user = persist.getUserByOtp(username, hash,otp);
         if (user != null) {
             response.setSuccess(true);
             response.setPermission(user.getRole().getId());

@@ -102,7 +102,7 @@ public class GeneralController {
     public List<QueryHistoryEntity> getQueryHistory() {
         return this.persist.loadList(QueryHistoryEntity.class);
     }
-
+    //לטפל בריגסטר החדש עם אימות טלפוני
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role) {

@@ -97,11 +97,14 @@ public class GeneralController {
 
     }
 
-
     @RequestMapping("/get-notifications")
-    public List<QueryHistoryEntity> getQueryHistory() {
-        return this.persist.loadList(QueryHistoryEntity.class);
+    public List<NotificationEntity> getNotifications() {
+        return this.persist.loadList(NotificationEntity.class);
     }
+//    @RequestMapping("/get-notifications")
+//    public List<QueryHistoryEntity> getQueryHistory() {
+//        return this.persist.loadList(QueryHistoryEntity.class);
+//    }
     //לטפל בריגסטר החדש עם אימות טלפוני
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,

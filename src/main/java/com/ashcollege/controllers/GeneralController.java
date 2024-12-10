@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 public class GeneralController {
-
+private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @Autowired
     private Persist persist;
 
@@ -105,21 +107,51 @@ public class GeneralController {
 //    public List<QueryHistoryEntity> getQueryHistory() {
 //        return this.persist.loadList(QueryHistoryEntity.class);
 //    }
-    //לטפל בריגסטר החדש עם אימות טלפוני
-    @RequestMapping("/register")
-    public RegisterResponse register(String userName, String password, String name, String lastName,
-                                     String email, String role) {
+
+    @RequestMapping("/check-otp-to-register")
+    public RegisterResponse addUser(String username,String otp) {
         boolean registeredSuccessfully = true;
         int errorCode = Constants.SUCCESS;
-        if (!isUsernameOrEmailExists(userName,email)) {
+        UserEntity user = this.tempUsers.get(username);
+        if (user==null||!user.getOtp().equals(otp)) {
+            registeredSuccessfully = false;
+            errorCode = Constants.FAIL;
+        } else {
+            user.setOtp("");
+          this.persist.save(user);
+
+        }
+        return new RegisterResponse(true, errorCode, registeredSuccessfully);
+    }
+    @RequestMapping("/register")
+    public RegisterResponse register(String userName, String password, String name, String lastName,
+                                     String email, String role,String phoneNumber){
+        //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
+        boolean registeredSuccessfully = true;
+        int errorCode = Constants.SUCCESS;
+        if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
             registeredSuccessfully = false;
             errorCode = Constants.FAIL;
         } else {
             String hashed = GeneralUtils.hashMd5(password);
-            UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role);
-            this.persist.save(user);
+            UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
+            String otp = GeneralUtils.generateOtp();
+            user.setOtp(otp);
+            this.tempUsers.put(user.getUsername(), user);
+            ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
         }
+        //במידה ותקין נשלח sms
         return new RegisterResponse(true, errorCode, registeredSuccessfully);
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        String phone = GeneralUtils.checkPhoneNumber(phoneNumber);
+        if(!phone.isEmpty()){
+            List<UserEntity> users = persist.loadList(UserEntity.class);
+            List<UserEntity> temp = users.stream().filter(user -> user.getPhoneNumber().equals(phone)).toList();
+            return temp.isEmpty();
+        }
+        return false;
     }
 
 

@@ -32,6 +32,9 @@
 
     </class>
 
+
+
+
     <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>

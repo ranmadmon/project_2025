@@ -59,7 +59,7 @@ public class UserEntity extends BaseEntity {
     private String lastName;
     private String email;
     private boolean recovery;
-    public UserEntity(String username, String password, String firstName, String lastName, String email,String role) {
+    public UserEntity(String username, String password, String firstName, String lastName, String email,String role,String phoneNumber) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -67,6 +67,7 @@ public class UserEntity extends BaseEntity {
         this.email = email;
         this.role = new RoleEntity();
         setTheRole(role);
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean isRecovery() {

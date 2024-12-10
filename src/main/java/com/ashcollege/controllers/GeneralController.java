@@ -111,6 +111,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @RequestMapping("/check-otp-to-register")
     public RegisterResponse addUser(String username,String otp) {
         boolean registeredSuccessfully = true;
+        System.out.println("R");
         int errorCode = Constants.SUCCESS;
         UserEntity user = this.tempUsers.get(username);
         if (user==null||!user.getOtp().equals(otp)) {
@@ -129,6 +130,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                                      String email, String role,String phoneNumber){
         //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
         boolean registeredSuccessfully = true;
+        System.out.println("R2");
         int errorCode = Constants.SUCCESS;
         if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
             registeredSuccessfully = false;
@@ -146,10 +148,10 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-        String phone = GeneralUtils.checkPhoneNumber(phoneNumber);
-        if(!phone.isEmpty()){
+      //  String phone = GeneralUtils.checkPhoneNumber(phoneNumber);
+        if(!phoneNumber.isEmpty()){
             List<UserEntity> users = persist.loadList(UserEntity.class);
-            List<UserEntity> temp = users.stream().filter(user -> user.getPhoneNumber().equals(phone)).toList();
+            List<UserEntity> temp = users.stream().filter(user -> user.getPhoneNumber().equals(phoneNumber)).toList();
             return temp.isEmpty();
         }
         return false;

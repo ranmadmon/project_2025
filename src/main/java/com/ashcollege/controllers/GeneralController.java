@@ -130,7 +130,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                                      String email, String role,String phoneNumber){
         //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
         boolean registeredSuccessfully = true;
-        System.out.println("R2");
+        System.out.println("R22222222");
         int errorCode = Constants.SUCCESS;
         if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
             registeredSuccessfully = false;

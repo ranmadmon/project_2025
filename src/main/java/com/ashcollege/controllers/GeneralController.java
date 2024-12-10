@@ -118,6 +118,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             errorCode = Constants.FAIL;
         } else {
             user.setOtp("");
+            this.tempUsers.remove(username);
           this.persist.save(user);
 
         }

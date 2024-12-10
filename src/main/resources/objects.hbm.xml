@@ -19,7 +19,6 @@
         <property name="password" type="string" column="password"/>
         <property name="firstName" type="string" column="firstName"/>
         <property name="lastName" type="string" column="lastName"/>
-        <property name="recovery" column="recovery" type="java.lang.Boolean"/>
         <property name="email" type="string" column="email"/>
         <property name="phoneNumber" type="java.lang.String" column="phone"/>
         <property name="otp" type="java.lang.String" column="otp"/>

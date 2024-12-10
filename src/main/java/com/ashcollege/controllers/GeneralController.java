@@ -128,21 +128,31 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @RequestMapping("/register")
     public RegisterResponse register(String userName, String password, String name, String lastName,
                                      String email, String role,String phoneNumber){
-        //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
         boolean registeredSuccessfully = true;
-        System.out.println("R22222222");
         int errorCode = Constants.SUCCESS;
-        if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
-            registeredSuccessfully = false;
-            errorCode = Constants.FAIL;
-        } else {
-            String hashed = GeneralUtils.hashMd5(password);
-            UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
-            String otp = GeneralUtils.generateOtp();
-            user.setOtp(otp);
-            this.tempUsers.put(user.getUsername(), user);
-            ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
+        //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
+        try {
+
+            System.out.println("R22222222" + password);
+
+            if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
+                registeredSuccessfully = false;
+                errorCode = Constants.FAIL;
+            } else {
+                String hashed = GeneralUtils.hashMd5(password);
+                UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
+                String otp = GeneralUtils.generateOtp();
+                user.setOtp(otp);
+                this.tempUsers.put(user.getUsername(), user);
+                ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
+            }
+            System.out.println(userName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
+
+
         //במידה ותקין נשלח sms
         return new RegisterResponse(true, errorCode, registeredSuccessfully);
     }

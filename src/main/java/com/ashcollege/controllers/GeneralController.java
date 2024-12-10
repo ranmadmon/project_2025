@@ -135,7 +135,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
             System.out.println("R22222222" + password);
 
-            if (!isUsernameOrEmailExists(userName,email)||isValidPhoneNumber(phoneNumber)) {
+            if (!isUsernameOrEmailExists(userName,email)||!isValidPhoneNumber(phoneNumber)) {
+                System.out.println(isValidPhoneNumber(phoneNumber));
                 registeredSuccessfully = false;
                 errorCode = Constants.FAIL;
             } else {
@@ -143,6 +144,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                 UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
                 String otp = GeneralUtils.generateOtp();
                 user.setOtp(otp);
+                System.out.println(user);
                 this.tempUsers.put(user.getUsername(), user);
                 ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
             }

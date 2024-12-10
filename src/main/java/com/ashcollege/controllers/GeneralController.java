@@ -161,7 +161,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
     private boolean isValidPhoneNumber(String phoneNumber) {
       //  String phone = GeneralUtils.checkPhoneNumber(phoneNumber);
-        if(!phoneNumber.isEmpty()){
+        if(GeneralUtils.isValidPhoneNumber(phoneNumber)){
             List<UserEntity> users = persist.loadList(UserEntity.class);
             List<UserEntity> temp = users.stream().filter(user -> user.getPhoneNumber().equals(phoneNumber)).toList();
             return temp.isEmpty();

@@ -3,6 +3,7 @@ package com.ashcollege.service;
 
 import com.ashcollege.entities.MaterialEntity;
 import com.ashcollege.entities.UserEntity;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,11 +65,15 @@ public class Persist {
     }
 
     public UserEntity getUserByUsernameAndPass(String username, String password) {
-        return this.sessionFactory.getCurrentSession()
-                .createQuery("FROM UserEntity WHERE username = :name and password = :password", UserEntity.class)
-                .setParameter("name", username)
-                .setParameter("password",password)
-                .uniqueResult();
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM UserEntity WHERE username = :name and password = :password", UserEntity.class)
+                    .setParameter("name", username)
+                    .setParameter("password",password)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<MaterialEntity> getMaterialByCourseId(int courseId) {

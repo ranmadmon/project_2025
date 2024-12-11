@@ -29,15 +29,19 @@ public class MaterialEntity extends BaseEntity {
 
     public MaterialEntity(String title, String type ,int userId, int courseId, String description, String tag, String content) {
         this.title = title;
+        //(title, type, userId, courseId, description, tag, content);
         this.userEntity = new UserEntity();
         this.userEntity.setId(userId);
         this.typeEntity = new TypeEntity();
         this.typeEntity.setId(setTypeId(type));
+        System.out.println(this.typeEntity.getId());
         this.courseEntity = new CourseEntity();
         this.courseEntity.setId(courseId);
         this.description = description;
         this.tagEntity = new TagEntity();
         this.tagEntity.setId(getTagId(tag));
+        System.out.println(this.tagEntity.getId());
+
         Content = content;
         this.uploadDate = new Date();
     }
@@ -48,7 +52,9 @@ public class MaterialEntity extends BaseEntity {
             case "אלגו" -> typeId = TAG_ALGO;
             case "מתמטיקה" -> typeId = TAG_MATH;
         }
+        System.out.println(typeId);
         return typeId;
+
     }
 
 
@@ -59,6 +65,7 @@ public class MaterialEntity extends BaseEntity {
             case "תרגיל" -> typeId = TYPE_EXERCISE;
             case "פתרון" -> typeId = TYPE_SOLUTION;
         }
+        System.out.println(typeId);
         return typeId;
     }
 

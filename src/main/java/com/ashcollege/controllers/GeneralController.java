@@ -219,6 +219,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         if (user != null) {
             if (user.getOtp().equals(otp)){
                 response.setSuccess(true);
+                user.setOtp("");
                 response.setPermission(user.getRole().getId());
                 System.out.println(hash);
                 response.setToken(hash);
@@ -229,7 +230,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                 }
             }
             System.out.println(user);
-            user.setOtp("");
+
             persist.save(user);
         }
 

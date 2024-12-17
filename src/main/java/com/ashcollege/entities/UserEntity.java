@@ -1,15 +1,26 @@
 package com.ashcollege.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.catalina.User;
 
 import java.util.List;
 
 public class UserEntity extends BaseEntity {
+    @JsonIgnore
     private String username;
+    @JsonIgnore
     private RoleEntity role;
     private String phoneNumber;
+    @JsonIgnore
     private String otp;
     private CourseEntity course;
+    @JsonIgnore
+    private String password;
+    private String firstName;
+    private String lastName;
+
+    private String email;
+    @JsonIgnore
     private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
     public UserEntity () {
 
@@ -54,10 +65,7 @@ public class UserEntity extends BaseEntity {
     public void setUsername(String username) {
         this.username = username;
     }
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
+
     public UserEntity(String username, String password, String firstName, String lastName, String email,String role,String phoneNumber) {
         this.username = username;
         this.password = password;

@@ -7,6 +7,8 @@ public class RoleEntity extends BaseEntity{
         return name;
     }
 
+    public RoleEntity() {}
+
     public void setName(String name) {
         this.name = name;
     }

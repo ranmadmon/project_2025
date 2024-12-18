@@ -20,7 +20,19 @@
         <property name="firstName" type="string" column="firstName"/>
         <property name="lastName" type="string" column="lastName"/>
         <property name="email" type="string" column="email"/>
+        <property name="phoneNumber" type="java.lang.String" column="phone"/>
+        <property name="otp" type="java.lang.String" column="otp"/>
+        <property name="passwordRecovery" type="java.lang.String" column="pass_recovery"/>
+        <many-to-one name="role" column="role_id" class="com.ashcollege.entities.RoleEntity"/>
+<!--        <set name="course" table="user_courses" lazy="true">-->
+<!--            <key column="user_id"/>-->
+<!--            <many-to-many column="course_id" class="com.ashcollege.entities.CourseEntity"/>-->
+<!--        </set>-->
+
     </class>
+
+
+
 
     <class name="com.ashcollege.entities.TagEntity" table="tags" lazy="false">
         <id name="id" type="int" column="id">
@@ -45,6 +57,11 @@
         <property name="description" type="java.lang.String" column="description"/>
         <many-to-one name="lecturerEntity" column="lecturer_id"
                      class="com.ashcollege.entities.LecturerEntity"/>
+
+<!--        <set name="user" table="user_courses" lazy="true">-->
+<!--            <key column="course_id"/>-->
+<!--            <many-to-many column="user_id" class="com.ashcollege.entities.UserEntity"/>-->
+<!--        </set>-->
     </class>
 
     <class name="com.ashcollege.entities.TypeEntity" table="types" lazy="false">
@@ -61,6 +78,7 @@
         <property name="title" column="title" type="java.lang.String"/>
         <many-to-one name="typeEntity" column="type_id"
                      class="com.ashcollege.entities.TypeEntity"/>
+        <property name="content" column="content" type="java.lang.String"/>
         <many-to-one name="userEntity" column="user_id"
                      class="com.ashcollege.entities.UserEntity"/>
         <property name="uploadDate" column="date" type="java.util.Date"/>
@@ -69,6 +87,7 @@
         <property name="description" column="description" type="java.lang.String"/>
         <many-to-one name="tagEntity" column="tag_id"
                      class="com.ashcollege.entities.TagEntity"/>
+
     </class>
 
 
@@ -80,6 +99,54 @@
         <property name="text" type="java.lang.String" column="query"/>
         <many-to-one name="userEntity" column="user_id"
                      class="com.ashcollege.entities.UserEntity" />
+
+    </class>
+
+    <class name="com.ashcollege.entities.RecoveryEntity" table="recovery" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="title" type="java.lang.String" column="title"/>
+        <property name="body" column="body" type="java.lang.String" />
+        <property name="email" type="java.lang.String" column="email" />
+        <property name="time" type="java.util.Date" column="time_stamp"/>
+
+    </class>
+
+
+    <class name="com.ashcollege.entities.NotificationEntity" table="notification" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="fromUser" column="from_user_id"
+                     class="com.ashcollege.entities.UserEntity" />
+        <many-to-one name="course" column="course_id"
+                     class="com.ashcollege.entities.CourseEntity" />
+        <property name="title" type="java.lang.String" column="title"/>
+        <property name="content" type="java.lang.String" column="content"/>
+        <property name="date" type="java.util.Date" column="time_stamp"/>
+
+    </class>
+
+    <class name="com.ashcollege.entities.MaterialHistoryEntity" table="`material-history`" lazy="false">
+
+
+        <id name="id" type="int" column="id">
+            <generator class="identity"/>
+        </id>
+
+
+        <many-to-one name="user" column="user_id"
+                     class="com.ashcollege.entities.UserEntity"
+                     cascade="all" not-null="true"/>
+
+
+        <many-to-one name="material" column="material_id"
+                     class="com.ashcollege.entities.MaterialEntity"
+                     cascade="all" not-null="true"/>
+
+
 
     </class>
 

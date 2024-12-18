@@ -2,7 +2,9 @@ package com.ashcollege.service;
 
 
 import com.ashcollege.entities.MaterialEntity;
+import com.ashcollege.entities.MaterialHistoryEntity;
 import com.ashcollege.entities.UserEntity;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +64,66 @@ public class Persist {
                 .setParameter("title",title)
                 .list();
     }
+
+    public UserEntity getUserByUsernameAndPass(String username, String password) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM UserEntity WHERE username = :name and password = :password", UserEntity.class)
+                    .setParameter("name", username)
+                    .setParameter("password",password)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<MaterialEntity> getMaterialByCourseId(int courseId) {
+        return this.getQuerySession()
+                .createQuery("FROM MaterialEntity WHERE course_id = :course_id")
+                .setParameter("course_id",courseId)
+                .list();
+    }
+
+    public UserEntity getUserByEmail(String email) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE email = :email ", UserEntity.class)
+                .setParameter("email", email)
+                .uniqueResult();
+    }
+
+    public UserEntity getUserByEmailAndPasswordRecovery(String email, String pass_recovery) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE email = :email and pass_recovery = :pass_recovery", UserEntity.class)
+                .setParameter("email", email)
+                .setParameter("pass_recovery" ,pass_recovery)
+                .uniqueResult();
+    }
+
+    public UserEntity getUserByUsername(String username) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM UserEntity WHERE username = :name", UserEntity.class)
+                .setParameter("name", username)
+                .uniqueResult();
+    }
+
+    public UserEntity getUserByPass(String password) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM UserEntity WHERE password = :password", UserEntity.class)
+                    .setParameter("password", password)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<MaterialEntity> getMaterialHistoryByUserId(int user_id) {
+        return this.getQuerySession()
+                .createQuery("SELECT mh.material FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id", MaterialEntity.class)
+                .setParameter("user_id", user_id)
+                .list();
+    }
+
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

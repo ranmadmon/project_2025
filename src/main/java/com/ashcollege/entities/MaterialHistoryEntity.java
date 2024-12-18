@@ -1,12 +1,19 @@
 package com.ashcollege.entities;
 
-public class MaterialHistoryEntity extends BaseEntity{
+import java.util.Date;
+
+public class MaterialHistoryEntity extends BaseEntity {
     private UserEntity user;
     private MaterialEntity material;
-    public MaterialHistoryEntity(){}
+    private Date time;
+
+    public MaterialHistoryEntity() {
+    }
+
     public MaterialHistoryEntity(UserEntity user, MaterialEntity material) {
         this.user = user;
         this.material = material;
+        this.time = new Date();
     }
 
     public UserEntity getUser() {
@@ -31,5 +38,13 @@ public class MaterialHistoryEntity extends BaseEntity{
                 "user=" + user +
                 ", material=" + material +
                 '}';
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

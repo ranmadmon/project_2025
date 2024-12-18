@@ -4,6 +4,7 @@ import com.ashcollege.entities.*;
 import com.ashcollege.responses.BasicResponse;
 import com.ashcollege.responses.LoginResponse;
 import com.ashcollege.responses.RegisterResponse;
+import com.ashcollege.responses.ValidationResponse;
 import com.ashcollege.service.Persist;
 import com.ashcollege.utils.ApiUtils;
 import com.ashcollege.utils.Constants;
@@ -28,10 +29,29 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @PostConstruct
     public void init() {
 
-        //  CourseEntity course2= new CourseEntity("Data Structures", "Data", lecturer.getName());
-        //this.persist.save(course);
-//        this.persist.save(course2);
-        //System.out.println(this.persist.loadObject(UserEntity.class,2));
+    }
+    @RequestMapping("/add-material-to-history")
+    public void addMaterialToHistory(String token,int materialId){
+        System.out.println(token);
+        System.out.println("pppp"+materialId);
+       UserEntity user =  this.persist.getUserByPass(token);
+        MaterialEntity material = this.persist.loadObject(MaterialEntity.class,materialId);
+       if (user!=null){
+           System.out.println("ttttt "+user);
+           this.persist.save(new MaterialHistoryEntity(user,material));
+       }
+    }
+    @RequestMapping("/get-material-history")
+    public List<MaterialEntity> getMaterialHistory(String token){
+        List<MaterialEntity> materialHistoryEntities  = new ArrayList<>();
+        System.out.println(token);
+        UserEntity user = this.persist.getUserByPass(token);
+        if (user!=null){
+            System.out.println(user.getId());
+            materialHistoryEntities = this.persist.getMaterialHistoryByUserId(user.getId());
+        }
+        System.out.println(materialHistoryEntities);
+        return materialHistoryEntities;
     }
 
     @RequestMapping("/get-course")
@@ -60,15 +80,13 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
     @RequestMapping("/add-material")
-    void addMaterial(String title, String type, String username,
+    void addMaterial(String title, String type,
                      String token, int courseId, String description, String tag, String content) {
 
-        System.out.println("tttt"+type+"tagg"+tag);
         try {
-            UserEntity userEntity = this.persist.getUserByUsernameAndPass(username, token);
+            UserEntity userEntity = this.persist.getUserByPass(token);
             int userId = userEntity.getId();
             MaterialEntity materialEntity = new MaterialEntity(title, type, userId, courseId, description, tag, content);
-            System.out.println(materialEntity);
             this.persist.save(materialEntity);
             RecoveryEntity recovery = new RecoveryEntity("My Title", "My OTP",
                     "shaigivati464@gmail.com");
@@ -115,51 +133,41 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     public List<NotificationEntity> getNotifications() {
         return this.persist.loadList(NotificationEntity.class);
     }
-//    @RequestMapping("/get-notifications")
-//    public List<QueryHistoryEntity> getQueryHistory() {
-//        return this.persist.loadList(QueryHistoryEntity.class);
-//    }
 
     @RequestMapping("/check-otp-to-register")
     public RegisterResponse addUser(String username,String otp) {
         boolean registeredSuccessfully = true;
-        System.out.println("R" + otp);
         int errorCode = Constants.SUCCESS;
         UserEntity user = this.tempUsers.get(username);
-        System.out.println("lllll"+username);
         if (user==null||!user.getOtp().equals(otp)) {
             registeredSuccessfully = false;
             errorCode = Constants.FAIL;
-        } else {
+        }
+        if (user!=null&&user.getOtp().equals(otp)){
             user.setOtp("");
             this.tempUsers.remove(username);
+            System.out.println("lll"+user);
           this.persist.save(user);
-
+            System.out.println(user);
         }
         return new RegisterResponse(true, errorCode, registeredSuccessfully);
     }
     @RequestMapping("/register")
-    public RegisterResponse register(String userName, String password, String name, String lastName,
-                                     String email, String role,String phoneNumber){
-        boolean registeredSuccessfully = true;
-        int errorCode = Constants.SUCCESS;
-        //קודם נבדוק שאין את הערכים האלה בטבלה במידה ואין נשלח הודעת sms
+    public ValidationResponse register(String userName, String password, String name, String lastName,
+                                       String email, String role, String phoneNumber){
+        System.out.println("YYYYyy"+email);
+        System.out.println("kkkk"+phoneNumber);
+        boolean isValid = true;
+        ValidationResponse validationResponse = new ValidationResponse();
         try {
-
-            System.out.println("R22222222" + phoneNumber);
-
-            if (!isUsernameOrEmailExists(userName,email)||!isValidPhoneNumber(phoneNumber)) {
-                System.out.println(isValidPhoneNumber(phoneNumber));
-                registeredSuccessfully = false;
-                errorCode = Constants.FAIL;
+            if (!isValid(userName,phoneNumber,email,validationResponse)) {
+                isValid = false;
             } else {
                 String hashed = GeneralUtils.hashMd5(password);
                 UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
                 String otp = GeneralUtils.generateOtp();
                 user.setOtp(otp);
-                System.out.println(user);
                 this.tempUsers.put(user.getUsername(), user);
-                System.out.println("kkkkkk"+this.tempUsers.get(user.getUsername()));
                 ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
             }
             System.out.println(userName);
@@ -167,14 +175,26 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             e.printStackTrace();
             throw e;
         }
+        validationResponse.setSuccess(isValid);
+        return validationResponse;
+    }
 
-
-        //במידה ותקין נשלח sms
-        return new RegisterResponse(true, errorCode, registeredSuccessfully);
+    private boolean isValid(String userName, String phoneNumber, String email,ValidationResponse validationResponse) {
+        boolean isValid = true;
+        if (!isUsernameExists(userName)){
+            validationResponse.setUsernameTaken(Constants.USERNAME_TAKEN);
+            isValid = false;
+        }else if (!isValidPhoneNumber(phoneNumber)){
+            validationResponse.setPhoneTaken(Constants.PHONE_TAKEN);
+            isValid = false;
+        }else if (!isEmailExists(email)){
+            validationResponse.setEmailTaken(Constants.EMAIL_TAKEN);
+            isValid = false;
+        }
+        return isValid;
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
-      //  String phone = GeneralUtils.checkPhoneNumber(phoneNumber);
         if(GeneralUtils.isValidPhoneNumber(phoneNumber)){
             List<UserEntity> users = persist.loadList(UserEntity.class);
             System.out.println(users);
@@ -229,7 +249,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                     response.setErrorCode(Constants.FAIL);
                 }
             }
-            System.out.println(user);
+            System.out.println("checkk"+user);
 
             persist.save(user);
         }
@@ -238,12 +258,16 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public BasicResponse login(String username, String password){
+        System.out.println("kk"+username);
         BasicResponse response = new BasicResponse();
         String hash = GeneralUtils.hashMd5(password);
+        System.out.println(hash);
         UserEntity user = persist.getUserByUsernameAndPass(username, hash);
+
         if (user != null){
             String otp = GeneralUtils.generateOtp();
             user.setOtp(otp);
+            System.out.println("jjjj"+otp);
             persist.save(user);
             response.setSuccess(true);
             response.setErrorCode(Constants.SUCCESS);
@@ -268,9 +292,14 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
 
-    public boolean isUsernameOrEmailExists(String username, String email) {
+    public boolean isUsernameExists(String username) {
         List<UserEntity> users = persist.loadList(UserEntity.class);
-        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)||user.getEmail().equals(email)).toList();
+        List<UserEntity> temp = users.stream().filter(user -> user.getUsername().equals(username)).toList();
+        return temp.isEmpty();
+    }
+    public boolean isEmailExists( String email) {
+        List<UserEntity> users = persist.loadList(UserEntity.class);
+        List<UserEntity> temp = users.stream().filter(user -> user.getEmail().equals(email)).toList();
         return temp.isEmpty();
     }
 

@@ -11,9 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 public class ApiUtils {
-    public static void main(String[] args) {
-        sendSms("Hi", List.of("0546369855", "0502392298", "0526990440"));
-    }
 
     public static boolean sendSms (String text, List<String> phones) {
         String token = Constants.SMS_TOKEN;

@@ -2,6 +2,7 @@ package com.ashcollege.service;
 
 
 import com.ashcollege.entities.MaterialEntity;
+import com.ashcollege.entities.MaterialHistoryEntity;
 import com.ashcollege.entities.UserEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -104,6 +105,25 @@ public class Persist {
                 .setParameter("name", username)
                 .uniqueResult();
     }
+
+    public UserEntity getUserByPass(String password) {
+        try {
+            return this.sessionFactory.getCurrentSession()
+                    .createQuery("FROM UserEntity WHERE password = :password", UserEntity.class)
+                    .setParameter("password", password)
+                    .uniqueResult();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<MaterialEntity> getMaterialHistoryByUserId(int user_id) {
+        return this.getQuerySession()
+                .createQuery("SELECT mh.material FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id", MaterialEntity.class)
+                .setParameter("user_id", user_id)
+                .list();
+    }
+
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){
 //        return this.sessionFactory.getCurrentSession()

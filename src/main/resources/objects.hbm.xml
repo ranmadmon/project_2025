@@ -129,6 +129,25 @@
 
     </class>
 
+    <class name="com.ashcollege.entities.MaterialHistoryEntity" table="`material-history`" lazy="false">
 
+
+        <id name="id" type="int" column="id">
+            <generator class="identity"/>
+        </id>
+
+
+        <many-to-one name="user" column="user_id"
+                     class="com.ashcollege.entities.UserEntity"
+                     cascade="all" not-null="true"/>
+
+
+        <many-to-one name="material" column="material_id"
+                     class="com.ashcollege.entities.MaterialEntity"
+                     cascade="all" not-null="true"/>
+
+
+
+    </class>
 
 </hibernate-mapping>

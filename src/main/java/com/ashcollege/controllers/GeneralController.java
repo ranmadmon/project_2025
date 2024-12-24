@@ -80,8 +80,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
     @RequestMapping("/add-material")
-    void addMaterial(String title, String type,
-                     String token, int courseId, String description, String tag, String content) {
+    void addMaterial(String title, int type,
+                     String token, int courseId, String description, int tag, String content) {
 
         try {
             UserEntity userEntity = this.persist.getUserByPass(token);

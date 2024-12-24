@@ -42,8 +42,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
        }
     }
     @RequestMapping("/get-material-history")
-    public List<MaterialEntity> getMaterialHistory(String token){
-        List<MaterialEntity> materialHistoryEntities  = new ArrayList<>();
+    public List<MaterialHistoryEntity> getMaterialHistory(String token){
+        List<MaterialHistoryEntity> materialHistoryEntities  = new ArrayList<>();
         System.out.println(token);
         UserEntity user = this.persist.getUserByPass(token);
         if (user!=null){

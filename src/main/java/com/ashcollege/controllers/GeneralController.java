@@ -11,11 +11,12 @@ import com.ashcollege.utils.Constants;
 import com.ashcollege.utils.GeneralUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,26 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
     @PostConstruct
     public void init() {
-
+        createMissingFolders();
     }
+
+    private String getMaterialsFolder () {
+        String userHome = System.getProperty("user.home");
+        String materialsFolder = String.format("%s%s%s", userHome, File.separator, "materiels");
+        return materialsFolder;
+    }
+
+    private void createMissingFolders () {
+        File file = new File(getMaterialsFolder());
+        if (!file.exists()) {
+            try {
+                file.mkdir();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @RequestMapping("/add-material-to-history")
     public void addMaterialToHistory(String token,int materialId){
         System.out.println(token);
@@ -42,8 +61,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
        }
     }
     @RequestMapping("/get-material-history")
-    public List<MaterialEntity> getMaterialHistory(String token){
-        List<MaterialEntity> materialHistoryEntities  = new ArrayList<>();
+    public List<MaterialHistoryEntity> getMaterialHistory(String token){
+        List<MaterialHistoryEntity> materialHistoryEntities  = new ArrayList<>();
         System.out.println(token);
         UserEntity user = this.persist.getUserByPass(token);
         if (user!=null){
@@ -80,8 +99,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
     @RequestMapping("/add-material")
-    void addMaterial(String title, String type,
-                     String token, int courseId, String description, String tag, String content) {
+    void addMaterial(String title, int type,
+                     String token, int courseId, String description, int tag, String content) {
 
         try {
             UserEntity userEntity = this.persist.getUserByPass(token);
@@ -306,6 +325,17 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public Object hello() {
         return "Hello From Server";
+    }
+
+
+    @RequestMapping(value = "/upload-file1", method = RequestMethod.POST)
+    public void uploadFile (@RequestParam(name = "file") MultipartFile file) {
+        File file1 = new File(getMaterialsFolder() + File.separator + file.getOriginalFilename());
+        try {
+            file.transferTo(file1);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

@@ -14,60 +14,32 @@ public class MaterialEntity extends BaseEntity {
     private TagEntity tagEntity;
     private String Content;
 
-    public static final int TYPE_PRESENTATION = 1;
-    public static final int TYPE_EXERCISE = 2;
-    public static final int TYPE_SOLUTION = 3;
-    public static final int TYPE_DEFAULT = 4;
-    public static final int TAG_ALGO = 1;
-    public static final int TAG_MATH = 2;
-    public static final int TAG_DEFAULT = 3;
 
 
 
     public MaterialEntity () {}
 
 
-    public MaterialEntity(String title, String type ,int userId, int courseId, String description, String tag, String content) {
+    public MaterialEntity(String title, int type ,int userId, int courseId, String description, int tag, String content) {
         this.title = title;
         //(title, type, userId, courseId, description, tag, content);
         this.userEntity = new UserEntity();
         this.userEntity.setId(userId);
         this.typeEntity = new TypeEntity();
-        this.typeEntity.setId(setTypeId(type));
+        this.typeEntity.setId(type);
         System.out.println(this.typeEntity.getId());
         this.courseEntity = new CourseEntity();
         this.courseEntity.setId(courseId);
         this.description = description;
         this.tagEntity = new TagEntity();
-        this.tagEntity.setId(getTagId(tag));
+        this.tagEntity.setId(tag);
         System.out.println(this.tagEntity.getId());
 
         Content = content;
         this.uploadDate = new Date();
     }
 
-    public int getTagId(String tag) {
-        int typeId = TAG_DEFAULT;
-        switch (tag) {
-            case "אלגו" -> typeId = TAG_ALGO;
-            case "מתמטיקה" -> typeId = TAG_MATH;
-        }
-        System.out.println(typeId);
-        return typeId;
 
-    }
-
-
-    public int setTypeId(String type) {
-        int typeId = TYPE_DEFAULT;
-        switch (type) {
-            case "מצגת" -> typeId = TYPE_PRESENTATION;
-            case "תרגיל" -> typeId = TYPE_EXERCISE;
-            case "פתרון" -> typeId = TYPE_SOLUTION;
-        }
-        System.out.println(typeId);
-        return typeId;
-    }
 
     public String getContent() {
         return Content;

@@ -116,13 +116,13 @@ public class Persist {
             throw new RuntimeException(e);
         }
     }
-
-    public List<MaterialEntity> getMaterialHistoryByUserId(int user_id) {
+    public List<MaterialHistoryEntity> getMaterialHistoryByUserId(int user_id) {
         return this.getQuerySession()
-                .createQuery("SELECT mh.material FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id", MaterialEntity.class)
+                .createQuery(" FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id", MaterialHistoryEntity.class)
                 .setParameter("user_id", user_id)
                 .list();
     }
+
 
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){

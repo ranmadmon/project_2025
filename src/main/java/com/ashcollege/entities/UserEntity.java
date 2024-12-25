@@ -6,7 +6,7 @@ import org.apache.catalina.User;
 import java.util.List;
 
 public class UserEntity extends BaseEntity {
-    @JsonIgnore
+
     private String username;
     @JsonIgnore
     private RoleEntity role;

@@ -27,6 +27,9 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @Autowired
     private Persist persist;
 
+    @Autowired
+    private StreamingController streamingController;
+
     @PostConstruct
     public void init() {
         createMissingFolders();
@@ -326,15 +329,33 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     public Object hello() {
         return "Hello From Server";
     }
+   @RequestMapping("/send-message")
+   public void sendMessage(String message,String token){
+        UserEntity user = this.persist.getUserByPass(token);
+        streamingController.sendToAll(new MessageEntity(message,user));
+   }
 
 
-    @RequestMapping(value = "/upload-file1", method = RequestMethod.POST)
-    public void uploadFile (@RequestParam(name = "file") MultipartFile file) {
-        File file1 = new File(getMaterialsFolder() + File.separator + file.getOriginalFilename());
-        try {
-            file.transferTo(file1);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+//    @RequestMapping(value = "/upload-file1", method = RequestMethod.POST)
+//    public void uploadFile (@RequestParam(name = "file") MultipartFile file) {
+//        File file1 = new File(getMaterialsFolder() + File.separator + file.getOriginalFilename());
+//        try {
+//            file.transferTo(file1);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+    @RequestMapping(value = "/upload-files", method = RequestMethod.POST)
+    public void uploadFiles(@RequestParam(name = "file") MultipartFile[] files) {
+        System.out.println(files.length);
+        for (MultipartFile file : files) {
+            try {
+
+                File fileToSave = new File(getMaterialsFolder() + File.separator + file.getOriginalFilename());
+                file.transferTo(fileToSave);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

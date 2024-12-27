@@ -23,10 +23,11 @@ public class StreamingController {
 
     @PostConstruct
     public void init() {
-        scheduler.scheduleAtFixedRate(this::sentTestMesssage, 0, 5, TimeUnit.SECONDS);
+
+        //scheduler.scheduleAtFixedRate(this::sentTestMessage, 0, 5, TimeUnit.SECONDS);
     }
 
-    private void sentTestMesssage() {
+    private void sentTestMessage() {
         System.out.println("Sending to " + sseEmitters.size());
         for (String token : sseEmitters.keySet()) {
             try {

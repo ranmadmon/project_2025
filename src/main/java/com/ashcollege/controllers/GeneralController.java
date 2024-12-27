@@ -102,9 +102,9 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
 
     @RequestMapping("/add-material")
-    void addMaterial(String title, int type,
+    int addMaterial(String title, int type,
                      String token, int courseId, String description, int tag, String content) {
-
+      int id = -1;
         try {
             UserEntity userEntity = this.persist.getUserByPass(token);
             int userId = userEntity.getId();
@@ -113,11 +113,12 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             RecoveryEntity recovery = new RecoveryEntity("My Title", "My OTP",
                     "shaigivati464@gmail.com");
             this.persist.save(recovery);
-
+         id = materialEntity.getId();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println("nfdn v j"+id);
+      return id;
     }
 
     @RequestMapping("/recovery-password")
@@ -185,7 +186,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             if (!isValid(userName,phoneNumber,email,validationResponse)) {
                 isValid = false;
             } else {
-                String hashed = GeneralUtils.hashMd5(password);
+                String hashed = GeneralUtils.hashMd5(userName , password);
                 UserEntity user = new UserEntity(userName, hashed, name, lastName, email, role,phoneNumber);
                 String otp = GeneralUtils.generateOtp();
                 user.setOtp(otp);
@@ -255,7 +256,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     public LoginResponse checkOtp(String username, String password,String otp) {
 
         LoginResponse response = new LoginResponse();
-        String hash = GeneralUtils.hashMd5(password);
+        String hash = GeneralUtils.hashMd5(username , password);
         UserEntity user = persist.getUserByUsernameAndPass(username, hash);
         System.out.println("pppppp"+user);
         if (user != null) {
@@ -282,7 +283,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     public BasicResponse login(String username, String password){
         System.out.println("kk"+username);
         BasicResponse response = new BasicResponse();
-        String hash = GeneralUtils.hashMd5(password);
+        String hash = GeneralUtils.hashMd5(username,password);
         System.out.println(hash);
         UserEntity user = persist.getUserByUsernameAndPass(username, hash);
 
@@ -294,6 +295,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             response.setSuccess(true);
             response.setErrorCode(Constants.SUCCESS);
             ApiUtils.sendSms(user.getOtp(), List.of(user.getPhoneNumber()));
+        }else {
+            response.setErrorCode(Constants.USER_NOT_EXIST);
         }
         return response;
     }
@@ -345,19 +348,20 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 //            throw new RuntimeException(e);
 //        }
 //    }
-    @RequestMapping(value = "/upload-files", method = RequestMethod.POST)
-    public void uploadFiles(@RequestParam(name = "file") MultipartFile[] files) {
-        System.out.println(files.length);
-        for (MultipartFile file : files) {
-            try {
-
-                File fileToSave = new File(getMaterialsFolder() + File.separator + file.getOriginalFilename());
-                file.transferTo(fileToSave);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+@RequestMapping(value = "/upload-files", method = RequestMethod.POST)
+public void uploadFiles(@RequestParam(name = "file") MultipartFile[] files,String id) {
+    System.out.println(files.length);
+    for (MultipartFile file : files) {
+        try {
+            File dir = new File(getMaterialsFolder() + File.separator + id);
+            dir.mkdir();
+            File fileToSave = new File(dir+File.separator+ file.getOriginalFilename());
+            file.transferTo(fileToSave);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
+}
 
 
 }

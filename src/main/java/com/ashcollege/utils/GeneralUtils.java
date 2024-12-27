@@ -12,7 +12,8 @@ public class GeneralUtils {
 
 
 
-    public static String hashMd5 (String source) {
+    public static String hashMd5 (String username, String password) {
+        String source = username + password;
         try {
             return DatatypeConverter.printHexBinary( MessageDigest.getInstance("MD5").digest(source.getBytes("UTF-8")));
         } catch (NoSuchAlgorithmException e) {

@@ -127,6 +127,21 @@
 
     </class>
 
+
+
+
+    <class name="com.ashcollege.entities.MessageEntity" table="message" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="sender" column="from_user_id"
+                     class="com.ashcollege.entities.UserEntity"/>
+       <property name="text" type="java.lang.String" column="message"/>
+        <property name="date" type="java.util.Date" column="time"/>
+
+
+    </class>
+
     <class name="com.ashcollege.entities.MaterialHistoryEntity" table="`material-history`" lazy="false">
 
 

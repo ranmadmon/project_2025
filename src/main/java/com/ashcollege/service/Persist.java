@@ -122,6 +122,12 @@ public class Persist {
                 .setParameter("user_id", user_id)
                 .list();
     }
+    public MaterialEntity getMaterialById(int id) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM MaterialEntity WHERE id= :id" , MaterialEntity.class)
+                .setParameter("id",id)
+                .uniqueResult();
+    }
 
 
 //

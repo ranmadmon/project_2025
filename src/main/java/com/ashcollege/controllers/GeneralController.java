@@ -17,6 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -300,7 +303,47 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         }
         return response;
     }
-    //
+    @RequestMapping(value = "/get-material-files-by-id", method = RequestMethod.GET)
+    public List<String> uploadFiles(int materialId) {
+        try {
+            String materialFolderPath = getMaterialsFolder() + File.separator + materialId;
+            Path dirPath = Paths.get(materialFolderPath);
+            if (!Files.exists(dirPath)) {
+                System.out.println("does not exist");
+                return List.of();
+            }
+            List<String> files = new ArrayList<>();
+            Files.list(dirPath).forEach(file -> {
+                files.add(String.valueOf(file.getFileName()));
+            });
+            return files;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return List.of();
+    }
+    @CrossOrigin(origins = "http://localhost:5173")
+    @DeleteMapping(value = "/delete-material-files-by-id-and-name")
+    public void deleteFiles ( int materialId,String[] fileNames) {
+        for (String name : fileNames) {
+            try {
+                String filePath = getMaterialsFolder() + File.separator + materialId + File.separator +name;
+                Path file = Paths.get(filePath);
+                System.out.println("aa" +filePath);
+                if (Files.exists(file)) {
+                    Files.delete(file);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @RequestMapping("/get-material-by-id")
+    public MaterialEntity getMaterialById(int materialId) {
+        return persist.getMaterialById(materialId);
+    }
+
 
     @RequestMapping("/update-password")
     public BasicResponse updatePassword(String username, String password) {

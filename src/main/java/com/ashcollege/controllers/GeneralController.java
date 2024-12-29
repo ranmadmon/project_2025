@@ -59,11 +59,15 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     public void addMaterialToHistory(String token,int materialId){
         System.out.println(token);
         System.out.println("pppp"+materialId);
+
        UserEntity user =  this.persist.getUserByPass(token);
         MaterialEntity material = this.persist.loadObject(MaterialEntity.class,materialId);
        if (user!=null){
            System.out.println("ttttt "+user);
-           this.persist.save(new MaterialHistoryEntity(user,material));
+           List<MaterialHistoryEntity> materialHistoryEntities = this.persist.getMaterialHistoryByUserIdAndMaterialId( materialId,user.getId());
+            if (materialHistoryEntities.size()==0){
+                this.persist.save(new MaterialHistoryEntity(user,material));
+            }
        }
     }
     @RequestMapping("/get-material-history")

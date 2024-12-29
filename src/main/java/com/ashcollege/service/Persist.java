@@ -129,6 +129,14 @@ public class Persist {
                 .uniqueResult();
     }
 
+    public List<MaterialHistoryEntity> getMaterialHistoryByUserIdAndMaterialId(int materialId,int user_id) {
+        return this.getQuerySession()
+                .createQuery(" FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id and material_id = : material_id", MaterialHistoryEntity.class)
+                .setParameter("user_id", user_id)
+                .setParameter("material_id", materialId)
+                .list();
+    }
+
 
 //
 //    public List<MaterialEntity> getMaterialByTag(String tag){

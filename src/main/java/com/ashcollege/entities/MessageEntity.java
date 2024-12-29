@@ -39,4 +39,14 @@ public class MessageEntity extends BaseEntity {
     public void setDate(Date date) {
         this.date = date;
     }
+    public MessageEntity(){}
+
+    @Override
+    public String toString() {
+        return "MessageEntity{" +
+                "text='" + text + '\'' +
+                ", sender=" + sender +
+                ", date=" + date +
+                '}';
+    }
 }

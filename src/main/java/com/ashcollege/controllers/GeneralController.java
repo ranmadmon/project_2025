@@ -35,7 +35,12 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
     @PostConstruct
     public void init() {
+
         createMissingFolders();
+
+
+
+
     }
 
     private String getMaterialsFolder () {
@@ -273,6 +278,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                 response.setPermission(user.getRole().getId());
                 System.out.println(hash);
                 response.setToken(hash);
+                response.setId(user.getId());
                 if (response.isSuccess()) {
                     response.setErrorCode(Constants.SUCCESS);
                 } else {
@@ -380,9 +386,13 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         return "Hello From Server";
     }
    @RequestMapping("/send-message")
-   public void sendMessage(String message,String token){
+   public boolean sendMessage(String message,String token){
         UserEntity user = this.persist.getUserByPass(token);
+        MessageEntity messageEntity = new MessageEntity(message,user);
+        this.persist.save(messageEntity);
+       System.out.println(message);
         streamingController.sendToAll(new MessageEntity(message,user));
+        return true;
    }
 
 

@@ -1,6 +1,8 @@
 package com.ashcollege.controllers;
 
 import com.ashcollege.entities.MessageEntity;
+import com.ashcollege.service.Persist;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,11 +24,25 @@ public class StreamingController {
     private final ConcurrentHashMap<String, SseEmitter> sseEmitters = new ConcurrentHashMap<>();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
+    @Autowired
+    private Persist persist;
+
+
     @PostConstruct
     public void init() {
-
         //scheduler.scheduleAtFixedRate(this::sentTestMessage, 0, 5, TimeUnit.SECONDS);
     }
+
+   private void sendMessageHistory(SseEmitter emitter){
+       List<MessageEntity> messages = this.persist.loadList(MessageEntity.class);
+       System.out.println(messages);
+       try {
+           emitter.send(messages);
+
+       }catch (IOException e){
+           System.out.println("error");
+       }
+   }
 
     private void sentTestMessage() {
         System.out.println("Sending to " + sseEmitters.size());
@@ -47,19 +64,21 @@ public class StreamingController {
         emitter.onCompletion(() -> sseEmitters.remove(token));
         emitter.onError(throwable -> sseEmitters.remove(token));
         emitter.onTimeout(() -> sseEmitters.remove(token));
-
+        sendMessageHistory(emitter);
         return emitter;
     }
 
     public void sendToAll(MessageEntity message) {
         for (String token : sseEmitters.keySet()) {
-            if (!token.equals(message.getSender().getPassword())) { // Replace with secure check
-                try {
-                    sseEmitters.get(token).send(message);
-                } catch (IOException e) {
-                    System.err.println("Failed to send message to token: " + token);
-                    sseEmitters.remove(token);
-                }
+            //!
+            if (token.equals(message.getSender().getPassword())) { // Replace with secure check
+              //  try {
+                    sendMessageHistory(sseEmitters.get(token));
+                    System.out.println(message);
+//                } catch (IOException e) {
+//                    System.err.println("Failed to send message to token: " + token);
+//                    sseEmitters.remove(token);
+//                }
             }
         }
     }

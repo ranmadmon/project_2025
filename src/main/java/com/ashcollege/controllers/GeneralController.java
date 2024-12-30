@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,8 +71,12 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
        if (user!=null){
            System.out.println("ttttt "+user);
            List<MaterialHistoryEntity> materialHistoryEntities = this.persist.getMaterialHistoryByUserIdAndMaterialId( materialId,user.getId());
-            if (materialHistoryEntities.size()==0){
+            if (materialHistoryEntities.isEmpty()){
                 this.persist.save(new MaterialHistoryEntity(user,material));
+            }else {
+                materialHistoryEntities.get(0).setTime(new Date());
+                this.persist.save(materialHistoryEntities.get(0));
+
             }
        }
     }

@@ -237,10 +237,12 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         if (!isUsernameExists(userName)){
             validationResponse.setUsernameTaken(Constants.USERNAME_TAKEN);
             isValid = false;
-        }else if (!isValidPhoneNumber(phoneNumber)){
+        }
+        if (!isValidPhoneNumber(phoneNumber)){
             validationResponse.setPhoneTaken(Constants.PHONE_TAKEN);
             isValid = false;
-        }else if (!isEmailExists(email)){
+        }
+        if (!isEmailExists(email)){
             validationResponse.setEmailTaken(Constants.EMAIL_TAKEN);
             isValid = false;
         }

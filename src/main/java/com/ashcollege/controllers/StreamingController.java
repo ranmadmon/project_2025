@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,7 +36,6 @@ public class StreamingController {
 
    private void sendMessageHistory(SseEmitter emitter){
        List<MessageEntity> messages = this.persist.loadList(MessageEntity.class);
-       System.out.println(messages);
        try {
            emitter.send(messages);
 
@@ -69,17 +69,18 @@ public class StreamingController {
     }
 
     public void sendToAll(MessageEntity message) {
+        List<MessageEntity> messages = new ArrayList<>();
+        messages.add(message);
         for (String token : sseEmitters.keySet()) {
             //!
-            if (token.equals(message.getSender().getPassword())) { // Replace with secure check
-              //  try {
-                    sendMessageHistory(sseEmitters.get(token));
-                    System.out.println(message);
-//                } catch (IOException e) {
-//                    System.err.println("Failed to send message to token: " + token);
-//                    sseEmitters.remove(token);
-//                }
-            }
+            //if (!token.equals(message.getSender().getPassword())) { // Replace with secure check
+               try {
+                    sseEmitters.get(token).send(messages);
+               } catch (IOException e) {
+                   System.err.println("Failed to send message to token: " + token);
+                   sseEmitters.remove(token);
+               }
+           // }
         }
     }
 }

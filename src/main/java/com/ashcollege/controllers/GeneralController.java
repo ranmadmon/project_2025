@@ -41,8 +41,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
 
 
-
     }
+
 
     private String getMaterialsFolder () {
         String userHome = System.getProperty("user.home");
@@ -59,6 +59,19 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @RequestMapping("/add-notification")
+    public void addNotification(String token,int courseId,String title,String content){
+        UserEntity user = this.persist.getUserByPass(token);
+        CourseEntity course = this.persist.loadObject(CourseEntity.class,courseId);
+        NotificationEntity notificationEntity=new NotificationEntity(user,course,title,content);
+        this.persist.save(notificationEntity);
+    }
+    @RequestMapping("/get-permission")
+    public int getPermission(String token){
+        UserEntity user = this.persist.getUserByPass(token);
+        return user.getRole().getId();
     }
 
     @RequestMapping("/add-material-to-history")

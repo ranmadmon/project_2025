@@ -41,7 +41,16 @@ public class NotificationEntity extends BaseEntity{
         this.title = title;
     }
 
+    public NotificationEntity() {
+    }
 
+    public NotificationEntity(UserEntity fromUser, CourseEntity course, String title, String content) {
+        this.fromUser = fromUser;
+        this.course = course;
+        this.title = title;
+        this.content = content;
+        this.date = new Date();
+    }
 
     public UserEntity getFromUser() {
         return fromUser;

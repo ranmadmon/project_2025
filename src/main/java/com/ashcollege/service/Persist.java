@@ -1,10 +1,7 @@
 package com.ashcollege.service;
 
 
-import com.ashcollege.entities.CourseEntity;
-import com.ashcollege.entities.MaterialEntity;
-import com.ashcollege.entities.MaterialHistoryEntity;
-import com.ashcollege.entities.UserEntity;
+import com.ashcollege.entities.*;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -140,9 +137,16 @@ public class Persist {
 
     public List<CourseEntity> getCoursesByLecturerId(int lecturerId) {
         return this.getQuerySession()
-                .createQuery(" FROM CourseEntity mh WHERE mh.user_id = :user_id ", CourseEntity.class)
-                .setParameter("user_id", lecturerId)
+                .createQuery(" FROM CourseEntity mh WHERE mh.lecturer_id = :lecturer_id ", CourseEntity.class)
+                .setParameter("lecturer_id", lecturerId)
                 .list();
+    }
+
+    public LecturerEntity getLIdByUserId(int userId) {
+        return this.sessionFactory.getCurrentSession()
+                .createQuery("FROM LecturerEntity WHERE user_id= :user_id" , LecturerEntity.class)
+                .setParameter("user_id",userId)
+                .uniqueResult();
     }
 
 

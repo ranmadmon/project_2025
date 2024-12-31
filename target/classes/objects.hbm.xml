@@ -44,6 +44,8 @@
             <generator class="native"/>
         </id>
         <property name="name" type="string" column="name"/>
+        <many-to-one name="user" column="user_id"
+                     class="com.ashcollege.entities.UserEntity"/>
     </class>
 
 

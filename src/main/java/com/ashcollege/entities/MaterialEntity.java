@@ -13,9 +13,15 @@ public class MaterialEntity extends BaseEntity {
     private String description;
     private TagEntity tagEntity;
     private String Content;
+   private String url;
 
+    public String getUrl() {
+        return url;
+    }
 
-
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public MaterialEntity () {}
 

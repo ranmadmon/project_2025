@@ -66,6 +66,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         UserEntity user = this.persist.getUserByPass(token);
         CourseEntity course = this.persist.loadObject(CourseEntity.class,courseId);
         NotificationEntity notificationEntity=new NotificationEntity(user,course,title,content);
+        //this.streamingController.sendNotificationToAll(notificationEntity);
         this.persist.save(notificationEntity);
     }
     @RequestMapping("/get-permission")
@@ -427,7 +428,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         MessageEntity messageEntity = new MessageEntity(message,user);
         this.persist.save(messageEntity);
        System.out.println(message);
-        streamingController.sendToAll(new MessageEntity(message,user));
+        streamingController.sendToAll(messageEntity);
         return true;
    }
 

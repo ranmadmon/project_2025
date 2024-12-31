@@ -1,6 +1,7 @@
 package com.ashcollege.controllers;
 
 import com.ashcollege.entities.MessageEntity;
+import com.ashcollege.entities.NotificationEntity;
 import com.ashcollege.service.Persist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,4 +84,17 @@ public class StreamingController {
            // }
         }
     }
+
+//    public void sendNotificationToAll(NotificationEntity notification) {
+//        List<NotificationEntity> notifications = new ArrayList<>();
+//        notifications.add(notification);
+//        for (String token : sseEmitters.keySet()) {
+//            try {
+//                sseEmitters.get(token).send(notifications);
+//            } catch (IOException e) {
+//                System.err.println("Failed to send message to token: " + token);
+//                sseEmitters.remove(token);
+//            }
+//        }
+//    }
 }

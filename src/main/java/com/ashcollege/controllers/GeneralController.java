@@ -75,7 +75,14 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
     @RequestMapping("/get-courses-byLecturer")
     public List<CourseEntity>getCoursesByLecturer(int userId){
-        int id = this.persist.getLIdByUserId(userId).getId();
+        int id = 28;
+        System.out.println(userId);
+        try {
+            id = this.persist.getLIdByUserId(userId).getId();
+        }catch (Exception e){
+            System.out.println("promblem");
+        }
+        System.out.println(this.persist.getCoursesByLecturerId(id));
         return this.persist.getCoursesByLecturerId(id);
     }
 
@@ -207,7 +214,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             System.out.println("lll"+user);
           this.persist.save(user);
           if (user.getRole().getId()==2){
-              LecturerEntity lecturer = new LecturerEntity(user.getFullName(),user);
+              LecturerEntity lecturer = new LecturerEntity(user.getFirstName(),user);
               this.persist.save(lecturer);
           }
             System.out.println(user);

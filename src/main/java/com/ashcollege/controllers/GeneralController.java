@@ -205,6 +205,10 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             this.tempUsers.remove(username);
             System.out.println("lll"+user);
           this.persist.save(user);
+          if (user.getRole().getId()==2){
+              LecturerEntity lecturer = new LecturerEntity(user.getFullName(),user);
+              this.persist.save(lecturer);
+          }
             System.out.println(user);
         }
         return new RegisterResponse(true, errorCode, registeredSuccessfully);
@@ -281,11 +285,11 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         this.persist.save(course);
     }
 
-    @RequestMapping("/add-lecturer")
-    public void addLecturer(String name) {
-        LecturerEntity lecturerEntity = new LecturerEntity(name);
-        this.persist.save(lecturerEntity);
-    }
+//    @RequestMapping("/add-lecturer")
+//    public void addLecturer(String name) {
+//        LecturerEntity lecturerEntity = new LecturerEntity(name);
+//        this.persist.save(lecturerEntity);
+//    }
 
 
     @RequestMapping(value = "/check-otp", method = {RequestMethod.GET, RequestMethod.POST})

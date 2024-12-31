@@ -140,8 +140,8 @@ public class Persist {
 
     public List<CourseEntity> getCoursesByLecturerId(int lecturerId) {
         return this.getQuerySession()
-                .createQuery(" FROM CourseEntity mh WHERE mh.lecturer_id = :lecturer_id ", CourseEntity.class)
-                .setParameter("lecturer_id", lecturerId)
+                .createQuery(" FROM CourseEntity mh WHERE mh.user_id = :user_id ", CourseEntity.class)
+                .setParameter("user_id", lecturerId)
                 .list();
     }
 

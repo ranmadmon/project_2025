@@ -73,6 +73,10 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         UserEntity user = this.persist.getUserByPass(token);
         return user.getRole().getId();
     }
+    @RequestMapping("/get-courses-byLecturer")
+    public List<CourseEntity>getCoursesByLecturer(int lecturerId){
+        return this.persist.getCoursesByLecturerId(lecturerId);
+    }
 
     @RequestMapping("/add-material-to-history")
     public void addMaterialToHistory(String token,int materialId){

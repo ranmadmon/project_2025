@@ -1,6 +1,7 @@
 package com.ashcollege.service;
 
 
+import com.ashcollege.entities.CourseEntity;
 import com.ashcollege.entities.MaterialEntity;
 import com.ashcollege.entities.MaterialHistoryEntity;
 import com.ashcollege.entities.UserEntity;
@@ -134,6 +135,13 @@ public class Persist {
                 .createQuery(" FROM MaterialHistoryEntity mh WHERE mh.user.id = :user_id and material_id = : material_id", MaterialHistoryEntity.class)
                 .setParameter("user_id", user_id)
                 .setParameter("material_id", materialId)
+                .list();
+    }
+
+    public List<CourseEntity> getCoursesByLecturerId(int lecturerId) {
+        return this.getQuerySession()
+                .createQuery(" FROM CourseEntity mh WHERE mh.lecturer_id = :lecturer_id ", CourseEntity.class)
+                .setParameter("lecturer_id", lecturerId)
                 .list();
     }
 

@@ -85,6 +85,7 @@
         <many-to-one name="courseEntity" column="course_id"
                      class="com.ashcollege.entities.CourseEntity"/>
         <property name="description" column="description" type="java.lang.String"/>
+        <property name="url" column="url" type="java.lang.String"/>
         <many-to-one name="tagEntity" column="tag_id"
                      class="com.ashcollege.entities.TagEntity"/>
 

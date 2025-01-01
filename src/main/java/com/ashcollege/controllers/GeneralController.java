@@ -444,47 +444,52 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 //    }
 
 
-@RequestMapping("/get-material-file-by-id")
-public String[] getFileNamesById(String id) {
-    System.out.println("!!" + id);
-    MaterialEntity materialEntity = this.persist.getMaterialById(Integer.parseInt(id));
-    System.out.println(materialEntity.getUrl());
+    @RequestMapping("/get-material-file-by-id")
+    public List<FileInfo> getFileNamesById(String id) {
+        System.out.println("!!" + id);
+        MaterialEntity materialEntity = this.persist.getMaterialById(Integer.parseInt(id));
+        System.out.println(materialEntity.getUrl());
 
-    if (materialEntity.getUrl() != null) {
-        File dir = new File(materialEntity.getUrl());
+        if (materialEntity.getUrl() != null) {
+            File dir = new File(materialEntity.getUrl());
 
-        if (dir.exists() && dir.isDirectory()) {
-            List<String> fileNamesList = new ArrayList<>();
+            if (dir.exists() && dir.isDirectory()) {
+                List<FileInfo> fileInfoList = new ArrayList<>();
 
-            // קריאה לפונקציה רקורסיבית לאיסוף שמות הקבצים
-            collectFileNames(dir, fileNamesList);
+                collectFileInfo(dir, fileInfoList, materialEntity.getUserEntity().getFullName());
 
-            // המרת רשימת שמות הקבצים למערך
-            return fileNamesList.toArray(new String[0]);
+                return fileInfoList;
+            }
         }
+
+        return new ArrayList<>();
     }
 
-    return new String[0];
-}
 
-    // פונקציה רקורסיבית לאיסוף שמות הקבצים
-    private void collectFileNames(File dir, List<String> fileNamesList) {
+    private void collectFileInfo(File dir, List<FileInfo> fileInfoList, String uploadedBy) {
         File[] files = dir.listFiles();
 
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("@"+fileNamesList);
-                    // אם מדובר בתיקייה, נקרא לפונקציה על התיקייה הפנימית
-                    collectFileNames(file, fileNamesList);
+                    System.out.println("@" + fileInfoList);
+
+                    collectFileInfo(file, fileInfoList, uploadedBy);
 
                 } else {
-                    // אם מדובר בקובץ, נוסיף את שמו לרשימה
-                    fileNamesList.add(file.getName());
+
+                    fileInfoList.add(new FileInfo(
+                            file.getName(),
+                            file.getAbsolutePath(),
+                            file.length(),
+                            uploadedBy
+                    ));
                 }
             }
         }
     }
+
+
 
 
 

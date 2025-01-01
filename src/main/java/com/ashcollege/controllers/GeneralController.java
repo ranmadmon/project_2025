@@ -351,9 +351,9 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         return response;
     }
     @RequestMapping(value = "/get-material-files-by-id", method = RequestMethod.GET)
-    public List<String> uploadFiles(int materialId) {
+    public List<String> uploadFiles(int materialId,int userId) {
         try {
-            String materialFolderPath = getMaterialsFolder() + File.separator + materialId;
+            String materialFolderPath = getMaterialsFolder() + File.separator + materialId+ File.separator+userId;
             Path dirPath = Paths.get(materialFolderPath);
             if (!Files.exists(dirPath)) {
                 System.out.println("does not exist");
@@ -371,10 +371,10 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
     @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping(value = "/delete-material-files-by-id-and-name")
-    public void deleteFiles ( int materialId,String[] fileNames) {
+    public void deleteFiles ( int materialId,String[] fileNames,int userId) {
         for (String name : fileNames) {
             try {
-                String filePath = getMaterialsFolder() + File.separator + materialId + File.separator +name;
+                String filePath = getMaterialsFolder() + File.separator + materialId + File.separator+userId+ File.separator +name;
                 Path file = Paths.get(filePath);
                 System.out.println("aa" +filePath);
                 if (Files.exists(file)) {
@@ -445,30 +445,45 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
 
 @RequestMapping("/get-material-file-by-id")
-    public String[] getFileNamesById(String id) {
-    System.out.println("!!"+id);
+public String[] getFileNamesById(String id) {
+    System.out.println("!!" + id);
     MaterialEntity materialEntity = this.persist.getMaterialById(Integer.parseInt(id));
     System.out.println(materialEntity.getUrl());
-    if (materialEntity.getUrl()!=null) {
+
+    if (materialEntity.getUrl() != null) {
         File dir = new File(materialEntity.getUrl());
 
-
         if (dir.exists() && dir.isDirectory()) {
+            List<String> fileNamesList = new ArrayList<>();
 
-            File[] files = dir.listFiles();
+            // קריאה לפונקציה רקורסיבית לאיסוף שמות הקבצים
+            collectFileNames(dir, fileNamesList);
 
-            if (files != null) {
+            // המרת רשימת שמות הקבצים למערך
+            return fileNamesList.toArray(new String[0]);
+        }
+    }
 
-                String[] fileNames = new String[files.length];
-                for (int i = 0; i < files.length; i++) {
-                    fileNames[i] = files[i].getName();
+    return new String[0];
+}
+
+    // פונקציה רקורסיבית לאיסוף שמות הקבצים
+    private void collectFileNames(File dir, List<String> fileNamesList) {
+        File[] files = dir.listFiles();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    System.out.println("@"+fileNamesList);
+                    // אם מדובר בתיקייה, נקרא לפונקציה על התיקייה הפנימית
+                    collectFileNames(file, fileNamesList);
+
+                } else {
+                    // אם מדובר בקובץ, נוסיף את שמו לרשימה
+                    fileNamesList.add(file.getName());
                 }
-                return fileNames;
             }
         }
-
-    }
-        return new String[0];
     }
 
 
@@ -477,22 +492,27 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
 
     @RequestMapping(value = "/upload-files", method = RequestMethod.POST)
-public void uploadFiles(@RequestParam(name = "file") MultipartFile[] files,String id) {
-    System.out.println(files.length);
-    for (MultipartFile file : files) {
-        try {
-            File dir = new File(getMaterialsFolder() + File.separator + id);
-            dir.mkdir();
-            File fileToSave = new File(dir+File.separator+ file.getOriginalFilename());
-            MaterialEntity materialEntity = this.persist.getMaterialById(Integer.parseInt(id));
-            materialEntity.setUrl(getMaterialsFolder() + File.separator + id);
-            this.persist.save(materialEntity);
-            file.transferTo(fileToSave);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-}
+public void uploadFiles(@RequestParam(name = "file") MultipartFile[] files,String materialId,int userId,String token) {
+   UserEntity user = this.persist.getUserByPass(token);
+   if (user!=null){
+       System.out.println(files.length);
+       for (MultipartFile file : files) {
+           try {
+               File dir = new File(getMaterialsFolder() + File.separator + materialId);
+               dir.mkdir();
+               File dirUserId = new File(dir+ File.separator+userId);
+               dirUserId.mkdir();
+               File fileToSave = new File(dirUserId+File.separator+ file.getOriginalFilename());
+               MaterialEntity materialEntity = this.persist.getMaterialById(Integer.parseInt(materialId));
+               materialEntity.setUrl(getMaterialsFolder() + File.separator + materialId);
+               this.persist.save(materialEntity);
+               file.transferTo(fileToSave);
+           } catch (IOException e) {
+               throw new RuntimeException(e);
+           }
+       }
+   }
+   }
 
 
 }

@@ -60,6 +60,16 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         }
     }
 
+    @RequestMapping("/get-username-by-token")
+    public String getNameByToken(String token){
+        String name = null;
+        UserEntity user = this.persist.getUserByPass(token);
+        if (user!=null){
+            name = user.getUsername();
+        }
+        return name;
+    }
+
     @RequestMapping("/add-notification")
     public void addNotification(String token,int courseId,String title,String content){
         UserEntity user = this.persist.getUserByPass(token);

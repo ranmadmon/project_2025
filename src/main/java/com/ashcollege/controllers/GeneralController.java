@@ -20,10 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class GeneralController {
@@ -33,6 +30,8 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
 
     @Autowired
     private StreamingController streamingController;
+    @Autowired
+    private NotificationStreamingController notificationStreamingController;
 
     @PostConstruct
     public void init() {
@@ -66,7 +65,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         UserEntity user = this.persist.getUserByPass(token);
         CourseEntity course = this.persist.loadObject(CourseEntity.class,courseId);
         NotificationEntity notificationEntity=new NotificationEntity(user,course,title,content);
-        //this.streamingController.sendNotificationToAll(notificationEntity);
+        this.notificationStreamingController.sendNotificationToAll(notificationEntity);
         this.persist.save(notificationEntity);
     }
     @RequestMapping("/get-permission")
@@ -76,10 +75,10 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     }
     @RequestMapping("/get-courses-byLecturer")
     public List<CourseEntity>getCoursesByLecturer(int userId){
-        int id = 28;
-        System.out.println(userId);
+        int id=1;
         try {
-            id = this.persist.getLIdByUserId(userId).getId();
+          id = this.persist.getLIdByUserId(userId).getId();
+            System.out.println("^^^" + id);
         }catch (Exception e){
             System.out.println("promblem");
         }
@@ -215,7 +214,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             System.out.println("lll"+user);
           this.persist.save(user);
           if (user.getRole().getId()==2){
-              LecturerEntity lecturer = new LecturerEntity(user.getFirstName(),user);
+              LecturerEntity lecturer = new LecturerEntity(user.getFullName(),user);
               this.persist.save(lecturer);
           }
             System.out.println(user);
@@ -291,6 +290,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
     @RequestMapping("/add-course")
     public void addCourses(String name, String description, int lecturer) {
         CourseEntity course = new CourseEntity(name, description, lecturer);
+        System.out.println("ccc:  " +lecturer);
         this.persist.save(course);
     }
 
@@ -322,7 +322,6 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
                     response.setErrorCode(Constants.FAIL);
                 }
             }
-            System.out.println("checkk"+user);
 
             persist.save(user);
         }
@@ -340,7 +339,6 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         if (user != null){
             String otp = GeneralUtils.generateOtp();
             user.setOtp(otp);
-            System.out.println("jjjj"+otp);
             persist.save(user);
             response.setSuccess(true);
             response.setErrorCode(Constants.SUCCESS);
@@ -376,7 +374,6 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             try {
                 String filePath = getMaterialsFolder() + File.separator + materialId + File.separator+userId+ File.separator +name;
                 Path file = Paths.get(filePath);
-                System.out.println("aa" +filePath);
                 if (Files.exists(file)) {
                     Files.delete(file);
                 }
@@ -456,7 +453,7 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
             if (dir.exists() && dir.isDirectory()) {
                 List<FileInfo> fileInfoList = new ArrayList<>();
 
-                collectFileInfo(dir, fileInfoList, materialEntity.getUserEntity().getFullName());
+                collectFileInfo(dir, fileInfoList);
 
                 return fileInfoList;
             }
@@ -465,18 +462,16 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         return new ArrayList<>();
     }
 
-
-    private void collectFileInfo(File dir, List<FileInfo> fileInfoList, String uploadedBy) {
+    private void collectFileInfo(File dir, List<FileInfo> fileInfoList) {
         File[] files = dir.listFiles();
 
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("@" + fileInfoList);
-
-                    collectFileInfo(file, fileInfoList, uploadedBy);
-
+                    collectFileInfo(file, fileInfoList);
                 } else {
+                    // Extract uploadedBy based on user ID in the path
+                    String uploadedBy = getUsernameFromPath(file.getAbsolutePath());
 
                     fileInfoList.add(new FileInfo(
                             file.getName(),
@@ -489,6 +484,23 @@ private HashMap<String,UserEntity> tempUsers = new HashMap<>();
         }
     }
 
+    private String getUsernameFromPath(String absolutePath) {
+       absolutePath = absolutePath.replace("\\","%");
+       String [] array = absolutePath.split("%");
+        String fileNameOrId = array[array.length-2];
+        try {
+            int userId = Integer.parseInt(fileNameOrId);
+            UserEntity userEntity = this.persist.loadObject(UserEntity.class, userId);
+
+            if (userEntity != null) {
+                return userEntity.getFullName();
+            }
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid user ID in path: " + absolutePath);
+        }
+
+        return "Unknown User";
+    }
 
 
 

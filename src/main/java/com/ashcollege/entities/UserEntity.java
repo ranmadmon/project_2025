@@ -1,29 +1,32 @@
 package com.ashcollege.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.catalina.User;
-
-import java.util.List;
 
 public class UserEntity extends BaseEntity {
 
     private String username;
+
     @JsonIgnore
     private RoleEntity role;
+
     private String phoneNumber;
+
     @JsonIgnore
     private String otp;
-    private CourseEntity course;
+
     @JsonIgnore
     private String password;
+
     private String firstName;
+
     private String lastName;
 
     private String email;
-    @JsonIgnore
-    private String passwordRecovery; //סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
-    public UserEntity () {
 
+    @JsonIgnore
+    private String passwordRecovery; // סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
+
+    public UserEntity() {
     }
 
     public String getPhoneNumber() {
@@ -42,14 +45,6 @@ public class UserEntity extends BaseEntity {
         this.otp = otp;
     }
 
-    public CourseEntity getCourse() {
-        return course;
-    }
-
-    public void setCourse(CourseEntity course) {
-        this.course = course;
-    }
-
     public String getPasswordRecovery() {
         return passwordRecovery;
     }
@@ -66,7 +61,7 @@ public class UserEntity extends BaseEntity {
         this.username = username;
     }
 
-    public UserEntity(String username, String password, String firstName, String lastName, String email,String role,String phoneNumber) {
+    public UserEntity(String username, String password, String firstName, String lastName, String email, String role, String phoneNumber) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -77,16 +72,13 @@ public class UserEntity extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-
-
     private void setTheRole(String role) {
-        switch (role){
+        switch (role) {
             case "Student" -> this.role.setId(1);
             case "Lecturer" -> this.role.setId(2);
             case "Admin" -> this.role.setId(3);
         }
     }
-
 
     public RoleEntity getRole() {
         return role;

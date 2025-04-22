@@ -1,6 +1,6 @@
 package com.ashcollege.entities;
 
-public class LecturerEntity extends BaseEntity{
+public class AdminEntity extends BaseEntity{
     private String name;
     private UserEntity user;
 
@@ -20,12 +20,12 @@ public class LecturerEntity extends BaseEntity{
         this.name = name;
     }
 
-    public LecturerEntity(String name,UserEntity user){
+    public AdminEntity(String name,UserEntity user){
 
         this.name=name;
         this.user = user;
     }
 
-    public LecturerEntity() {
+    public AdminEntity() {
     }
 }

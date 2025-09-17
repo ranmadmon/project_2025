@@ -26,7 +26,7 @@ public class ApiUtils {
         }
         jsonObject.put("Recipients", recipients);
         JSONObject settingsJson = new JSONObject();
-        settingsJson.put("Sender", "KB");
+        settingsJson.put("Sender", "primesec");
         jsonObject.put("Settings", settingsJson);
         System.out.println(jsonObject);
         HttpHeaders httpHeaders = new HttpHeaders();

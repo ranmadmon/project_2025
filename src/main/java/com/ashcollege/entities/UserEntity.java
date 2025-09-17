@@ -22,9 +22,12 @@ public class UserEntity extends BaseEntity {
     private String lastName;
 
     private String email;
+    private String status;
 
     @JsonIgnore
     private String passwordRecovery; // סיסמא שתיווצר במידה ומשתמש שכח סיסמא וצריך לאפס לו
+    private int teamId;
+
 
     public UserEntity() {
     }
@@ -72,11 +75,11 @@ public class UserEntity extends BaseEntity {
         this.phoneNumber = phoneNumber;
     }
 
-    private void setTheRole(String role) {
+    public void setTheRole(String role) {
         switch (role) {
-            case "Student" -> this.role.setId(1);
-            case "Lecturer" -> this.role.setId(2);
-            case "Admin" -> this.role.setId(3);
+            case "worker" -> this.role.setId(1);
+            case "teamLeader" -> this.role.setId(2);
+            case "admin" -> this.role.setId(3);
         }
     }
 
@@ -118,6 +121,30 @@ public class UserEntity extends BaseEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public boolean isDeleted() {
+        return status != null && !status.isBlank() && "DELETED".equalsIgnoreCase(status.trim());
+    }
+
+    public boolean isActive() {
+        return !isDeleted();
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

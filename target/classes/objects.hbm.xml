@@ -22,65 +22,96 @@
         <property name="firstName" type="string" column="first_name"/>
         <property name="lastName" type="string" column="last_name"/>
         <property name="email" type="string" column="email"/>
-        <property name="phoneNumber" type="java.lang.String" column="phone"/>
-        <property name="otp" type="java.lang.String" column="otp"/>
-        <property name="passwordRecovery" type="java.lang.String" column="pass_recovery"/>
+        <property name="phoneNumber" type="string" column="phone"/>
+        <property name="otp" type="string" column="otp"/>
+        <property name="passwordRecovery" type="string" column="pass_recovery"/>
         <many-to-one name="role" column="role_id" class="com.ashcollege.entities.RoleEntity"/>
+        <property name="teamId" type="int" column="team_id"/>
+        <property name="status" type="string" column="status"/>
+
     </class>
 
-    <!-- User Progress Entity -->
-    <class name="com.ashcollege.entities.UserProgressEntity" table="user_progress" lazy="false">
+    <!-- Ability Entity -->
+    <class name="com.ashcollege.entities.AbilityEntity" table="abilities" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
-        <many-to-one name="user" column="user_id" class="com.ashcollege.entities.UserEntity" not-null="true"/>
-        <property name="mathematicalExercisesLevel" type="int" column="mathematical_exercises_level" not-null="true"/>
-        <property name="verbalQuestionsLevel" type="int" column="verbal_questions_level" not-null="true"/>
-        <property name="variableQuestionsLevel" type="int" column="variable_questions_level" not-null="true"/>
-        <property name="mathematicalExercisesScore" type="int" column="mathematicalExercisesScore" not-null="true"/>
-        <property name="verbalQuestionsScore" type="int" column="verbalQuestionsScore" not-null="true"/>
-        <property name="variableQuestionsScore" type="int" column="variableQuestionsScore" not-null="true"/>
+        <property name="name" type="string" column="name"/>
     </class>
 
-    <!-- Question Entity -->
-    <class name="com.ashcollege.entities.QuestionEntity" table="questions" lazy="false">
+    <!-- Task Entity -->
+    <class name="com.ashcollege.entities.TaskEntity" table="tasks" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
-        <property name="text" type="java.lang.String" column="question_text" not-null="true"/>
-        <property name="correctAnswer" type="int" column="correct_answer" not-null="true"/>
-        <property name="difficultyLevel" type="int" column="difficulty_level" not-null="true"/>
-        <property name="correct" type="java.lang.String" column="correct" not-null="true"/>
-        <many-to-one name="user" column="user_id" class="com.ashcollege.entities.UserEntity" not-null="false"/>
-        <property name="timeStamp" type="java.util.Date" column="timestamp"/>
-        <property name="type" type="int" column="type"/>
+        <property name="name" type="string" column="name"/>
+        <property name="averageTime" type="int" column="average_time"/>
+        <property name="status" type="string" column="status" not-null="true" length="20"/>
+
     </class>
 
-
-
-    <!-- Question Templates Entity -->
-    <class name="com.ashcollege.entities.QuestionTemplateEntity" table="question_templates" lazy="false">
+    <!-- Client Entity -->
+    <class name="com.ashcollege.entities.ClientEntity" table="clients" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
-        <property name="template" type="string" column="template" not-null="true"/>
-        <property name="operation" type="string" column="operation" not-null="true"/>
-        <property name="level" type="int" column="level" not-null="true"/>
-        <property name="objects" type="string" column="objects"/>
-        <property name="names" type="string" column="names"/>
+        <property name="name" type="string" column="name"/>
+        <many-to-one name="manager" class="com.ashcollege.entities.UserEntity" column="manager_id"/>
+        <property name="status" type="string" column="status" not-null="true" length="20"/>
     </class>
 
-    <!-- Notification Entity -->
-    <class name="com.ashcollege.entities.ProgressNotificationEntity" table="progress_notifications" lazy="false">
+
+    <!-- TaskRequirement Entity -->
+    <class name="com.ashcollege.entities.TaskRequirementEntity" table="task_requirements" lazy="false">
+            <id name="taskId" column="task_id" type="int"/>
+        <property name="abilities" column="abilities" type="string"/>
+    </class>
+
+    <!-- UserAbility Entity -->
+    <class name="com.ashcollege.entities.UserAbilityEntity" table="user_abilities" lazy="false">
+        <id name="userId" column="user_id" type="int"/>
+        <property name="abilities" column="abilities" type="string"/>
+    </class>
+
+    <!-- Team Entity -->
+    <class name="com.ashcollege.entities.TeamEntity" table="teams" lazy="false">
         <id name="id" type="int" column="id">
             <generator class="native"/>
         </id>
-        <many-to-one name="user" column="user_id" class="com.ashcollege.entities.UserEntity" not-null="true"/>
-        <property name="subject" type="string" column="subject" not-null="true"/>
-        <property name="message" type="string" column="message" not-null="true"/>
-        <property name="read" type="boolean" column="is_read" not-null="true"/>
-        <property name="timestamp" type="java.util.Date" column="timestamp" not-null="true"/>
+        <property name="name" type="string" column="name"/> <!-- 🆕 שם הצוות -->
+        <many-to-one name="head" column="head_id" class="com.ashcollege.entities.UserEntity"/>
     </class>
 
+
+    <!-- TeamMember Entity -->
+    <class name="com.ashcollege.entities.TeamMemberEntity" table="team_members" lazy="false">
+        <composite-id>
+            <key-property name="teamId" column="team_id" type="int"/>
+            <key-property name="userId" column="user_id" type="int"/>
+        </composite-id>
+    </class>
+
+    <!-- TaskAssignment Entity -->
+    <class name="com.ashcollege.entities.TaskAssignmentEntity" table="task_assignments" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="task"   column="task_id"   class="com.ashcollege.entities.TaskEntity"/>
+        <many-to-one name="client" column="client_id" class="com.ashcollege.entities.ClientEntity"/>
+        <!-- השדה 'user' שנותר כ'בעל המשימה' -->
+        <many-to-one name="user"   column="user_id"   class="com.ashcollege.entities.UserEntity"/>
+        <property   name="hours" column="hours_required" type="int"/>
+        <property   name="status"        column="status"         type="string"/>
+        <property   name="assignedDate"  column="assigned_date"  type="date"/>
+    </class>
+    <!-- TaskAssignment Entity -->
+    <class name="com.ashcollege.entities.AssignmentParticipantEntity" table="assignmentParticipantEntity" lazy="false">
+        <id name="id" type="int" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="task"   column="task_id"   class="com.ashcollege.entities.TaskAssignmentEntity"/>
+        <many-to-one name="user"   column="user_id"   class="com.ashcollege.entities.UserEntity"/>
+        <property   name="hours" column="hours_assigned" type="int"/>
+    </class>
 
 </hibernate-mapping>

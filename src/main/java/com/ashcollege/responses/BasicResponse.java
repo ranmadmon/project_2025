@@ -27,4 +27,7 @@ public class BasicResponse {
     public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
+
+    public void setMessage(String invalidToken) {
+    }
 }
